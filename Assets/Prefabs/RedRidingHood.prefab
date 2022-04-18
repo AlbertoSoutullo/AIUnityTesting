@@ -80,6 +80,7 @@ GameObject:
   - component: {fileID: 217083897110588779}
   - component: {fileID: 217083897110588778}
   - component: {fileID: 3294066435854068468}
+  - component: {fileID: 5411666363437950794}
   m_Layer: 6
   m_Name: RedRidingHood
   m_TagString: Player
@@ -101,6 +102,7 @@ Transform:
   - {fileID: 905754312714663772}
   - {fileID: 4906881557484394311}
   - {fileID: 8332525807490278622}
+  - {fileID: 1802677959770193016}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -179,10 +181,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 13.110456
-  m_Height: 36.04549
+  m_Radius: 8.307857
+  m_Height: 31.325802
   m_Direction: 1
-  m_Center: {x: -0.39000064, y: 21.127254, z: -1.6399994}
+  m_Center: {x: -0.39000088, y: 18.76736, z: 0.2018098}
 --- !u!95 &217083897110588752
 Animator:
   serializedVersion: 3
@@ -247,10 +249,24 @@ MonoBehaviour:
   TerrainLayer:
     serializedVersion: 2
     m_Bits: 8
-  Enemy: {fileID: 1604578897047870077, guid: 09a0ebff9e004394da934fa661257406, type: 3}
+  Enemy: {fileID: 6808834351924723036, guid: 9a3b3ea1733af4047826f0cf501d9962, type: 3}
   maxRadious: 10
   minSpawnTime: 15
   maxSpawnTime: 30
+--- !u!114 &5411666363437950794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217083897110588777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96796ea4dc1aab4458a67962f330a0f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterCollider: {fileID: 217083897110588756}
+  characterBlockerCollider: {fileID: 847497488616888725}
 --- !u!1 &755875577650313240
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,6 +669,68 @@ Transform:
   m_Father: {fileID: 4906881557484394311}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2700877585944637194
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1802677959770193016}
+  - component: {fileID: 6171394643058762359}
+  - component: {fileID: 847497488616888725}
+  m_Layer: 8
+  m_Name: CharacterCollisionBloquer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1802677959770193016
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2700877585944637194}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.053, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 596986486491690963}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &6171394643058762359
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2700877585944637194}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!136 &847497488616888725
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2700877585944637194}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 15.444144
+  m_Height: 44.70266
+  m_Direction: 1
+  m_Center: {x: -0.6574085, y: 18.112349, z: -0.13746753}
 --- !u!1 &2704540863564047818
 GameObject:
   m_ObjectHideFlags: 0
