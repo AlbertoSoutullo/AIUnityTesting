@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 namespace EnemyAI.New_Enemy.Scripts
 {
@@ -9,6 +10,9 @@ namespace EnemyAI.New_Enemy.Scripts
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             animator.SetBool(IsDead, true);
+            Destroy(animator.GetComponent<Rigidbody>());
+            animator.GetComponent<NavMeshAgent>().enabled = false;
+            animator.GetComponent<CapsuleCollider>().enabled = false;
         }
 
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
