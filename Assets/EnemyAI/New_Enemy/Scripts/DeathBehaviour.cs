@@ -11,7 +11,6 @@ namespace EnemyAI.New_Enemy.Scripts
         {
             animator.SetBool(IsDead, true);
             Destroy(animator.GetComponent<Rigidbody>());
-            animator.GetComponent<NavMeshAgent>().enabled = false;
             animator.GetComponent<CapsuleCollider>().enabled = false;
         }
 

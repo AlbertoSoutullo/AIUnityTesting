@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +11,6 @@ public class SpawnEnemies : MonoBehaviour
     public float minSpawnTime = 15;
     public float maxSpawnTime = 30;
     
-
     private IEnumerator coroutine;
     private void Start()
     {
@@ -39,8 +36,8 @@ public class SpawnEnemies : MonoBehaviour
             {
                 randomPositiony = hit.point.y;
             }
-
-            randomPositiony += Enemy.GetComponent<CapsuleCollider>().height / 2;
+            
+            randomPositiony += Enemy.transform.position.y / 2;
             Vector3 randomPosition = new Vector3(randomPositionx, randomPositiony, randomPositionz);
 
             Instantiate(Enemy, randomPosition, Quaternion.identity);
