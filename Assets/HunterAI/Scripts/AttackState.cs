@@ -1,26 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace HunterAI.Scripts
 {
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
 	public class AttackState : FsmState<CompanionMovement>
 	{
-		static readonly AttackState instance = new AttackState();
-		public static AttackState Instance { get { return instance; } }
+		public static AttackState instance { get; } = new AttackState();
 
 		private bool desiredLocationSet;
 		private Vector3 desiredLocation;
@@ -28,20 +12,17 @@ namespace HunterAI.Scripts
 		static AttackState()
 		{
 		}
-		AttackState()
-		{
-		}
 		public override void Enter(CompanionMovement companion)
 		{
 			Debug.Log("Entering AttackState");
-			// First of all attack the target
+			
 			companion.Attack();
 		}
 
 		public override void Execute(CompanionMovement companion)
 		{
-			if (companion.currentTarget != null)
-				companion.transform.LookAt(companion.currentTarget.transform.position);
+			if (companion.GetCurrentTarget() != null)
+				companion.transform.LookAt(companion.GetCurrentTarget().transform.position);
 			//if (companion.IsAttackAnimationFinished())
 			//{
 			//	companion.FinishAttack();
@@ -83,20 +64,6 @@ namespace HunterAI.Scripts
 			//	companion.transform.LookAt(companion.currentTarget.transform.position);
 		}
 
-		public override void Exit(CompanionMovement companion)
-		{
-		}
-
-		// Start is called before the first frame update
-		void Start()
-		{
-
-		}
-
-		// Update is called once per frame
-		void Update()
-		{
-
-		}
+		public override void Exit(CompanionMovement companion) {}
 	}
 }

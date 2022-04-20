@@ -7,12 +7,7 @@ namespace HunterAI.Scripts
         static readonly RechargeState instance = new RechargeState();
         public static RechargeState Instance { get { return instance; } }
 
-        static RechargeState()
-        {
-        }
-        RechargeState()
-        {
-        }
+        static RechargeState() {}
 
         public override void Enter(CompanionMovement companion)
         {
@@ -21,32 +16,15 @@ namespace HunterAI.Scripts
 
         public override void Execute(CompanionMovement companion)
         {
-            // If the companion's weapon is not charged,
-            // charge it then attack
             if (!companion.weaponIsCharged)
             {
                 Debug.Log("Charging weapon");
                 companion.weaponIsCharged = true;
             }
             Debug.Log("Weapon is charged so changing to AttackState");
-            companion.GetFSM().ChangeState(AttackState.Instance);
-
+            companion.GetFsm().ChangeState(AttackState.instance);
         }
 
-        public override void Exit(CompanionMovement companion)
-        {
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
+        public override void Exit(CompanionMovement companion) {}
     }
 }

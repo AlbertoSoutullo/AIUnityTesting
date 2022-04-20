@@ -249,7 +249,7 @@ MonoBehaviour:
   TerrainLayer:
     serializedVersion: 2
     m_Bits: 8
-  Enemy: {fileID: 6808834351924723036, guid: 9a3b3ea1733af4047826f0cf501d9962, type: 3}
+  Enemy: {fileID: 1932402746202957328, guid: 0f713e0aece33dc44afa38bda23c498d, type: 3}
   maxRadious: 10
   minSpawnTime: 15
   maxSpawnTime: 30

@@ -4,15 +4,9 @@ namespace HunterAI.Scripts
 {
     public class PointState : FsmState<CompanionMovement>
     {
-        static readonly PointState instance = new PointState();
-        public static PointState Instance { get { return instance; } }
+        public static PointState instance { get; } = new PointState();
 
-        static PointState()
-        {
-        }
-        PointState()
-        {
-        }
+        static PointState() {}
 
         public override void Enter(CompanionMovement companion)
         {
@@ -24,30 +18,18 @@ namespace HunterAI.Scripts
                 companion.Point();
             }
             else
-                companion.GetFSM().ChangeState(IdleState.instance);
+                companion.GetFsm().ChangeState(IdleState.instance);
         }
 
         public override void Execute(CompanionMovement companion)
         {
-
-            //Debug.Log("Going back to IdleState");
+            Debug.Log("Executing in point state");
             //companion.GetFSM().ChangeState(IdleState.Instance);
         }
 
         public override void Exit(CompanionMovement companion)
         {
-        }
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            Debug.Log("EXITING POINT STATE");
         }
     }
 }
