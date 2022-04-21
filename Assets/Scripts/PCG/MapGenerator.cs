@@ -5,10 +5,11 @@ using TerrainData = PCG.Data.TerrainData;
 
 namespace PCG
 {
-    public class MapGenerator : MonoBehaviour {
-
-        public int mapWidth;
-        public int mapHeight;
+    public class MapGenerator : MonoBehaviour
+    {
+        public const int ChunkSize = 241;
+        [Range(0,6)]
+        public int levelOfDetail;
 
         public CameraMovement cameraMovement;
 
@@ -58,7 +59,7 @@ namespace PCG
         }
 
         public MeshData GenerateMap() {
-            float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, noiseData.seed, 
+            float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(ChunkSize, ChunkSize, noiseData.seed, 
                 noiseData.noiseScale, noiseData.octaves, noiseData.persistance, noiseData.lacunarity, 
                 noiseData.offset);
             
@@ -67,7 +68,7 @@ namespace PCG
             textureData.ApplyToMaterial(terrainMaterial);
             
             MeshData meshData = MeshGenerator.GenerateTerrainMesh(noiseMap, terrainData.meshHeightMultiplier, 
-                terrainData.meshHeightCurve);
+                terrainData.meshHeightCurve, levelOfDetail);
             display.DrawMesh(meshData);
             
             return meshData;
@@ -87,7 +88,8 @@ namespace PCG
             }
         
             // determine where to instantiate the prefabs
-            PrefabsInternalData prefabsInternalData = PrefabsGenerator.DeterminePrefabsPositions(mapWidth, mapHeight, terrainData.meshHeightMultiplier, positions, prefabsData);
+            PrefabsInternalData prefabsInternalData = PrefabsGenerator.DeterminePrefabsPositions(ChunkSize, 
+                ChunkSize, terrainData.meshHeightMultiplier, positions, prefabsData);
         
             // instantiate the prefabs
             MapDisplay display = FindObjectOfType<MapDisplay> ();
@@ -97,18 +99,6 @@ namespace PCG
         private void GenerateNavMesh()
         {
             surface.BuildNavMesh();
-        }
-
-        private void OnValidate() {
-            if (mapWidth < 1) 
-            {
-                mapWidth = 1;
-            }
-            if (mapHeight < 1) 
-            {
-                mapHeight = 1;
-            }
-            
         }
     }
 }
