@@ -4,6 +4,7 @@ using PCG.Data;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using UnityEngine.UIElements;
 using TerrainData = PCG.Data.TerrainData;
 
 namespace PCG
@@ -12,8 +13,10 @@ namespace PCG
     {
         public const int ChunkSize = 241;
         [Range(0,6)]
-        public int levelOfDetail;
+        public int editorPreviewLOD;
 
+        public NoiseGenerator.NormalizeMode normalizeMode;
+        
         public CameraMovement cameraMovement;
 
         public TerrainData terrainData;
@@ -34,10 +37,12 @@ namespace PCG
 
         public void Start()
         {
-            MeshData mesh = GenerateMap();
-            GeneratePrefabs(mesh);
-            GeneratePlayerAndHunter();
-            GenerateNavMesh();
+            //MeshData mesh = GenerateMap();
+            //GeneratePrefabs(mesh);
+            //GeneratePlayerAndHunter();
+            //GenerateNavMesh();
+            textureData.UpdateMeshHeights(terrainMaterial, terrainData.minHeight, terrainData.maxHeight);
+            textureData.ApplyToMaterial(terrainMaterial);
         }
 
         private void GeneratePlayerAndHunter()
@@ -64,28 +69,32 @@ namespace PCG
             cameraMovement.target = playerObject.transform;
         }
 
-        public MapData GenerateMapData()
+        public MapData GenerateMapData(Vector2 center)
         {
             float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(ChunkSize, ChunkSize, noiseData.seed, 
                 noiseData.noiseScale, noiseData.octaves, noiseData.persistance, noiseData.lacunarity, 
-                noiseData.offset);
+                center + noiseData.offset, normalizeMode);
 
             return new MapData(noiseMap);
         }
 
         public MeshData GenerateMap()
         {
-            MapData mapData = GenerateMapData();
-            
+            MapData mapData = GenerateMapData(transform.position);
+
             MapDisplay display = FindObjectOfType<MapDisplay>();
+
             textureData.UpdateMeshHeights(terrainMaterial, terrainData.minHeight, terrainData.maxHeight);
+
             textureData.ApplyToMaterial(terrainMaterial);
-            
+
             MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapData.HeightMap, terrainData.meshHeightMultiplier, 
-                terrainData.meshHeightCurve, levelOfDetail);
+
+            terrainData.meshHeightCurve, editorPreviewLOD);
             display.DrawMesh(meshData);
-            
+
             return meshData;
+
         }
 
         private void GeneratePrefabs(MeshData mesh)
@@ -103,47 +112,48 @@ namespace PCG
         
             // determine where to instantiate the prefabs
             PrefabsInternalData prefabsInternalData = PrefabsGenerator.DeterminePrefabsPositions(ChunkSize, 
-                ChunkSize, terrainData.meshHeightMultiplier, positions, prefabsData);
+                ChunkSize, terrainData.meshHeightMultiplier, positions, prefabsData, normalizeMode);
         
             // instantiate the prefabs
             MapDisplay display = FindObjectOfType<MapDisplay> ();
             display.InstantiatePrefabs(prefabsInternalData);
         }
 
-        public void RequestMapData(Action<MapData> callback)
+        public void RequestMapData(Vector2 center, Action<MapData> callback)
         {
             ThreadStart threadStart = delegate
             {
-                MapDataThread(callback);
+                MapDataThread(center, callback);
             };
             
             new Thread(threadStart).Start();
         }
 
-        void MapDataThread(Action<MapData> callback)
+        void MapDataThread(Vector2 center, Action<MapData> callback)
         {
-            MapData mapData = GenerateMapData();
+            MapData mapData = GenerateMapData(center);
+
             lock (_mapDataThreadInfoQueue)
             {
                 _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));    
             }
         }
 
-        void MeshDataThread(MapData mapData, Action<MeshData> callback)
+        void MeshDataThread(MapData mapData, int lod, Action<MeshData> callback)
         {
             MeshData meshData = MeshGenerator.GenerateTerrainMesh(mapData.HeightMap, terrainData.meshHeightMultiplier, 
-                terrainData.meshHeightCurve, levelOfDetail);
+                terrainData.meshHeightCurve, lod);
             lock (_meshDataThreadInfoQueue)
             {
                 _meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));
             }
         }
 
-        public void RequestMeshData(MapData mapData, Action<MeshData> callback)
+        public void RequestMeshData(MapData mapData, int lod, Action<MeshData> callback)
         {
             ThreadStart threadStart = delegate
             {
-                MeshDataThread(mapData, callback);
+                MeshDataThread(mapData, lod, callback);
             };
             
             new Thread(threadStart).Start();

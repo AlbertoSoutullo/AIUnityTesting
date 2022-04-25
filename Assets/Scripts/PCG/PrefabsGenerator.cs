@@ -5,7 +5,8 @@ using PCG;
 
 public static class PrefabsGenerator {
 
-    public static PrefabsInternalData DeterminePrefabsPositions(int mapWidth, int mapHeight, float heightMultiplier, Vector3[] oldPositions, PrefabsData prefabsData) {
+    public static PrefabsInternalData DeterminePrefabsPositions(int mapWidth, int mapHeight, float heightMultiplier, Vector3[] oldPositions, PrefabsData prefabsData,
+        NoiseGenerator.NormalizeMode normalizeMode) {
         System.Random random = new System.Random(prefabsData.seed);
         
         AnimationCurve noiseImportance = prefabsData.noiseImportance;
@@ -38,7 +39,8 @@ public static class PrefabsGenerator {
                 prefabs[i].noise.octaves, 
                 prefabs[i].noise.persistance, 
                 prefabs[i].noise.lacunarity, 
-                prefabs[i].noise.offset);
+                prefabs[i].noise.offset,
+                normalizeMode);
             noiseMaps.Add(noiseMap);
             prefabsTransforms[i] = prefabs[i].transforms;
             transformsNames[i] = prefabs[i].name;
