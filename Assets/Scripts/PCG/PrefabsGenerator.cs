@@ -6,7 +6,7 @@ using PCG;
 public static class PrefabsGenerator {
 
     public static PrefabsInternalData DeterminePrefabsPositions(int mapWidth, int mapHeight, float heightMultiplier, Vector3[] oldPositions, PrefabsData prefabsData,
-        NoiseGenerator.NormalizeMode normalizeMode) {
+        Noise.NormalizeMode normalizeMode, bool useFallOffMap, float[,] fallOffMap) {
         System.Random random = new System.Random(prefabsData.seed);
         
         AnimationCurve noiseImportance = prefabsData.noiseImportance;
@@ -28,10 +28,12 @@ public static class PrefabsGenerator {
         Vector3 cabinPosition = DetermineCabinPosition(positions, prefabsData.cabinPrefab.heightImportance, heightMultiplier, random, prefabsData.seed);
         positions[oldPositions.Length] = cabinPosition;
 
+        // TODO CLEAN 
         // create the noise maps for all prefabs
+        /*
         for (int i = 0; i < prefabs.Length; ++i)
         {
-            float[,] noiseMap = NoiseGenerator.GenerateNoiseMap (
+            float[,] noiseMap = Noise.GenerateNoiseMap (
                 mapWidth, 
                 mapHeight, 
                 prefabs[i].noise.seed, 
@@ -40,11 +42,14 @@ public static class PrefabsGenerator {
                 prefabs[i].noise.persistance, 
                 prefabs[i].noise.lacunarity, 
                 prefabs[i].noise.offset,
-                normalizeMode);
+                normalizeMode,
+                useFallOffMap,
+                fallOffMap
+                );
             noiseMaps.Add(noiseMap);
             prefabsTransforms[i] = prefabs[i].transforms;
             transformsNames[i] = prefabs[i].name;
-        }
+        }*/
         
         // create the internal data object for display everything later on
         PrefabsInternalData prefabsInternalData = new PrefabsInternalData(positions, prefabsTransforms, transformsNames);

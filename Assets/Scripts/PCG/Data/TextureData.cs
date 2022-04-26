@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Linq;
+using PCG.Data;
 
 [CreateAssetMenu()]
-public class TextureData : ScriptableObject
+public class TextureData : UpdatableData
 {
     private const int textureSize = 512;
     private const TextureFormat textureFormat = TextureFormat.RGB565;

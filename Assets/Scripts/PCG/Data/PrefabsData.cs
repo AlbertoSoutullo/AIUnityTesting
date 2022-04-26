@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using PCG.Data;
 
 [CreateAssetMenu()]
 public class PrefabsData : ScriptableObject
@@ -16,7 +17,7 @@ public class PrefabsData : ScriptableObject
     {
         public String name;
         public List<Transform> transforms;
-        public NoiseData noise;
+        public HeightMapSettings noise;
         public AnimationCurve heightImportance;
     }
 

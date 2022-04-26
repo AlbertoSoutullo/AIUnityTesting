@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,11 @@ public class CameraMovement : MonoBehaviour
     public Vector3 offset;
 
     public float smoothSpeed;
+
+    private void Start()
+    {
+        target = GameObject.FindWithTag("Player").transform;
+    }
 
     // Update is called once per frame
     void LateUpdate()
