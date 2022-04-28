@@ -10,9 +10,7 @@ namespace PCG
 
         public Renderer textureRender;
         public MeshFilter meshFilter;
-        public MeshRenderer meshRenderer;
-        public MeshCollider meshCollider;
-        
+
         [Range(0,6)]
         public int editorPreviewLOD;
         public bool autoUpdate;
