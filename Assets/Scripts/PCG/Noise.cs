@@ -30,18 +30,6 @@ namespace PCG
             noiseMap = NormalizeNoiseMap(noiseMap, mapHeight, mapWidth, minNoiseHeight, 
                 maxNoiseHeight, settings.normalizeMode);
 
-            /*
-            if (HeightMapSettings.)
-            {
-                for (int x = 0; x < mapWidth; x++)
-                {
-                    for (int y = 0; y < mapHeight; y++)
-                    {
-                        noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y] - fallOffMap[x, y]);
-                    }
-                }
-            }*/
-
             return noiseMap;
         }
 
@@ -96,9 +84,9 @@ namespace PCG
                     
                     noiseMap[x, y] = noiseHeight;
 
-                    if (settings.normalizeMode == NormalizeMode.Local) {
-                        float normalizedHeight = (noiseMap[x, y] + 1) / (2f * maxPossibleNoiseHeight / 2.5f);
-                        noiseMap[x, y] = normalizedHeight;
+                    if (settings.normalizeMode == NormalizeMode.Global) {
+                        float normalizedHeight = (noiseMap [x, y] + 1) / (maxPossibleNoiseHeight / 0.9f);
+                        noiseMap [x, y] = Mathf.Clamp (normalizedHeight, 0, int.MaxValue);
                     }
                 }
             }
@@ -112,7 +100,7 @@ namespace PCG
             if (normalizeMode == NormalizeMode.Local) {
                 for (int y = 0; y < mapHeight; y++) {
                     for (int x = 0; x < mapWidth; x++) {
-                        noiseMap[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
+                        noiseMap [x, y] = Mathf.InverseLerp (minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap [x, y]);
                     }
                 }
             }
