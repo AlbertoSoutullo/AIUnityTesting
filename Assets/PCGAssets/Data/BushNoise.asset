@@ -12,9 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74c804f357d7b52d8380119f358b2d8, type: 3}
   m_Name: BushNoise
   m_EditorClassIdentifier: 
-  noiseScale: 30
-  octaves: 3
-  persistance: 0.6
-  lacunarity: 2
-  seed: 0
-  offset: {x: 0, y: 0}
+  autoUpdate: 0
+  noiseSettings:
+    normalizeMode: 0
+    scale: 50
+    octaves: 5
+    persistance: 0.5
+    lacunarity: 2
+    seed: 0
+    offset: {x: 0, y: 0}
+  useFalloff: 0
+  heightMultiplier: 2
+  heightCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

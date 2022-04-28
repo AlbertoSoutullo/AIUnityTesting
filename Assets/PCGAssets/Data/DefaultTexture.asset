@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e0b04fe20c1c2bc8bcbda530c3f594d, type: 3}
   m_Name: DefaultTexture
   m_EditorClassIdentifier: 
+  autoUpdate: 1
   layers:
   - texture: {fileID: 2800000, guid: 68426aa008d07d8ee88a3b6ed23d9f77, type: 3}
     tint: {r: 0.13725486, g: 0.4481881, b: 0.93333334, a: 0}
