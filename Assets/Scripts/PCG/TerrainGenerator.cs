@@ -14,6 +14,7 @@ namespace PCG
 
         public HeightMapSettings heightMapSettings;
         public TextureData textureSettings;
+        public MeshSettings meshSettings;
 
         public LODInfo[] detailLevels;
 
@@ -36,7 +37,7 @@ namespace PCG
             
             float MAXViewDistance = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
             
-            _chunkSize = MapGenerator.ChunkSize - 1;
+            _chunkSize = meshSettings.numVertsPerLine;
             _chunkVisibleInViewDistance = Mathf.RoundToInt(MAXViewDistance / _chunkSize);
 
             UpdateVisibleChunks();

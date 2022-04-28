@@ -17,6 +17,7 @@ namespace PCG
 
         private MeshRenderer _meshRenderer;
         private MeshFilter _meshFilter;
+        private MeshCollider _meshCollider;
         private LODInfo[] _detailLevels;
         private LODMesh[] _lodMeshes;
 
@@ -105,6 +106,8 @@ namespace PCG
                         {
                             previousLODIndex = lodIndex;
                             _meshFilter.mesh = lodMesh.mesh;
+                            _meshCollider = _meshObject.AddComponent<MeshCollider>();
+                            _meshCollider.sharedMesh = _meshFilter.mesh;
                         }
                         else if (!lodMesh.hasRequestedMesh)
                         {
