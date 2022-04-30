@@ -2,6 +2,7 @@
 using PCG.Data;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace PCG
 {
@@ -21,6 +22,8 @@ namespace PCG
         public Transform viewer;
         public Material mapMaterial;
 
+        public NavMeshSurface surface;
+        
         private Vector2 _viewerPosition;
         private Vector2 _viewerPositionOld;
         private int _chunkSize;
@@ -41,6 +44,7 @@ namespace PCG
             _chunkVisibleInViewDistance = Mathf.RoundToInt(MAXViewDistance / _chunkSize);
 
             UpdateVisibleChunks();
+            surface.BuildNavMesh();
         }
 
         private void Update()

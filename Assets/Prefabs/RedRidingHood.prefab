@@ -79,8 +79,8 @@ GameObject:
   - component: {fileID: 217083897110588752}
   - component: {fileID: 217083897110588779}
   - component: {fileID: 217083897110588778}
-  - component: {fileID: 3294066435854068468}
   - component: {fileID: 5411666363437950794}
+  - component: {fileID: 2684375732920181266}
   m_Layer: 6
   m_Name: RedRidingHood
   m_TagString: Player
@@ -219,7 +219,6 @@ MonoBehaviour:
   health: 100
   maxHealth: 100
   healthBar: {fileID: 8332525809110015225}
-  hunter: {fileID: 4807178834208914642, guid: 1bebd2cea0810d9469bdd417d4e16136, type: 3}
 --- !u!114 &217083897110588778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,7 +233,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 300
   rotationSpeed: 720
---- !u!114 &3294066435854068468
+--- !u!114 &5411666363437950794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 217083897110588777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96796ea4dc1aab4458a67962f330a0f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterCollider: {fileID: 217083897110588756}
+  characterBlockerCollider: {fileID: 847497488616888725}
+--- !u!114 &2684375732920181266
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -250,23 +263,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   Enemy: {fileID: 1932402746202957328, guid: 0f713e0aece33dc44afa38bda23c498d, type: 3}
-  maxRadious: 10
+  hunter: {fileID: 1740264005145846946, guid: b80376040ee976d4e9eb32972c61e744, type: 3}
+  maxRadious: 40
   minSpawnTime: 15
   maxSpawnTime: 30
---- !u!114 &5411666363437950794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 217083897110588777}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96796ea4dc1aab4458a67962f330a0f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterCollider: {fileID: 217083897110588756}
-  characterBlockerCollider: {fileID: 847497488616888725}
 --- !u!1 &755875577650313240
 GameObject:
   m_ObjectHideFlags: 0
