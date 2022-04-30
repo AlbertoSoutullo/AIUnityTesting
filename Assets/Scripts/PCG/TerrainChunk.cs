@@ -16,15 +16,15 @@ namespace PCG
         private bool _heightMapReceived;
 
         private MeshRenderer _meshRenderer;
-        private MeshFilter _meshFilter;
+        public MeshFilter _meshFilter;
         private MeshCollider _meshCollider;
         private LODInfo[] _detailLevels;
         private LODMesh[] _lodMeshes;
 
         private int previousLODIndex = -1;
 
-        private HeightMapSettings _heightMapSettings;
-        private int _size;
+        public HeightMapSettings _heightMapSettings;
+        public int _size;
 
         private float _maxViewDistance;
         private Vector2 _position;

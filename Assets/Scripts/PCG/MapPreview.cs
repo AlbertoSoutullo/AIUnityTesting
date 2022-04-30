@@ -26,8 +26,11 @@ namespace PCG
             textureData.UpdateMeshHeights (terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
             textureData.ApplyToMaterial (terrainMaterial);
             HeightMap heightMap = HeightMapGenerator.GenerateHeightMap (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
-            
-            DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap.values, editorPreviewLOD));
+
+            MeshData mesh = MeshGenerator.GenerateTerrainMesh(heightMap.values, editorPreviewLOD);
+            DrawMesh(mesh);
+            PutPrefabsInMap test = FindObjectOfType<PutPrefabsInMap>();
+            test.GeneratePrefabs(mesh);
         }
 
         private void DrawMesh(MeshData meshData) {

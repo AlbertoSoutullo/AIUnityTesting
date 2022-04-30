@@ -11,7 +11,7 @@ public class Player: MonoBehaviour
     public float health, maxHealth;
     public HealthBar healthBar;
 
-    public GameObject hunter;
+    private GameObject hunter;
     
     public void TakeDamage(int damage){
         // Use your own damage handling code, or this example one.
@@ -20,7 +20,8 @@ public class Player: MonoBehaviour
     }
     
     void Start(){
-        hunter = GameObject.FindGameObjectsWithTag("Hunter")[0];
+        
+        hunter = GameObject.FindGameObjectWithTag("Hunter");
     }
 
     private void OnTriggerEnter(Collider other)
