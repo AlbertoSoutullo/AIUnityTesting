@@ -5,7 +5,7 @@ using UnityEngine;
 namespace PCG.Data
 {
     [CreateAssetMenu()]
-    public class PrefabsData : ScriptableObject
+    public class PrefabsData : UpdatableData
     {
         public int seed;
         public AnimationCurve noiseImportance;
