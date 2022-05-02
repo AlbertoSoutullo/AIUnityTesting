@@ -52,10 +52,10 @@ namespace PCG
             var position = viewer.position;
             _viewerPosition = new Vector2(position.x, position.z);
             
-            if ((_viewerPositionOld - _viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate);
+            if ((_viewerPositionOld - _viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
             {
                 _viewerPositionOld = _viewerPosition;
-                UpdateVisibleChunks();                
+                UpdateVisibleChunks();
             }
         }   
 

@@ -16,6 +16,7 @@ namespace PCG
         
             // create objects for the display class later on
             List<float[,]> noiseMaps = new List<float[,]>();
+            
             Vector3[] positions = new Vector3[oldPositions.Length + 1];
             Array.Copy(oldPositions, positions, oldPositions.Length);
             List<Transform>[] prefabsTransforms = new List<Transform>[prefabs.Length + 1];
@@ -27,7 +28,8 @@ namespace PCG
             transformsNames[prefabs.Length] = "cabin";
         
             // determine cabin position
-            Vector3 cabinPosition = DetermineCabinPosition(positions, prefabsData.cabinPrefab.heightImportance, heightMultiplier, random, prefabsData.seed);
+            Vector3 cabinPosition = DetermineCabinPosition(positions, prefabsData.cabinPrefab.heightImportance, 
+                heightMultiplier, random, prefabsData.seed);
             positions[oldPositions.Length] = cabinPosition;
 
             // TODO CLEAN 
@@ -53,22 +55,31 @@ namespace PCG
             prefabsInternalData.AddPositionPrefabs(oldPositions.Length, prefabs.Length);
 
             // loop all positions and determine whether to instantiate the prefabs
-            for (int i = 0; i < positions.Length; ++i)
+            for (int i = 0; i < positions.Length - 1; ++i)
             {
                 for (int j = 0; j < prefabs.Length; ++j)
                 {
                     Vector3 position = positions[i];
                     PrefabsData.Prefab prefab = prefabs[j];
                     float[,] noiseMap = noiseMaps[j];
-                
+
+                    float normalizedPositionX = Mathf.Abs(position.x) % ((noiseMap.GetLength (0) - 1) / 2f);
+                    float normalizedPositionZ = Mathf.Abs(position.z) % ((noiseMap.GetLength (1) - 1) / 2f);
                     // weighted sum between the position height and the noise of the prefab
-                    int positionInNoiseMapX = (int) Math.Round(position[0] - (noiseMap.GetLength (0) - 1) / -2f);
-                    int positionInNoiseMapZ = (int) Math.Round((noiseMap.GetLength (1) - 1) / 2f - position[2]);
+                    int positionInNoiseMapX = (int) Math.Round(normalizedPositionX - (noiseMap.GetLength (0) - 1) / -2f);
+                    int positionInNoiseMapZ = (int) Math.Round((noiseMap.GetLength (1) - 1) / 2f - normalizedPositionZ);
                     float positionY = position[1] / heightMultiplier;
 
+                    
+                    if ((positionInNoiseMapX > noiseMap.GetLength(0)) || (positionInNoiseMapZ > noiseMap.GetLength(1)))
+                    {
+                        int asd = 1;
+                    }
+                    
                     float heightProbability = prefab.heightImportance.Evaluate(positionY);
                     float noiseProbability = noiseImportance.Evaluate(noiseMap[positionInNoiseMapX, positionInNoiseMapZ]);
 
+                    
                     // sample true or false with the given probability
                     double randomNumber = random.NextDouble();
                     if (randomNumber < heightProbability & randomNumber < noiseProbability)
@@ -81,7 +92,8 @@ namespace PCG
             return prefabsInternalData;
         }
 
-        private static Vector3 DetermineCabinPosition(Vector3[] positions, AnimationCurve heightImportance, float heightMultiplier, System.Random random, int seed)
+        private static Vector3 DetermineCabinPosition(Vector3[] positions, AnimationCurve heightImportance, 
+            float heightMultiplier, System.Random random, int seed)
         {
             // randomly sample a set of positions
             List<Vector3> randomlySampledPositions = new List<Vector3>();

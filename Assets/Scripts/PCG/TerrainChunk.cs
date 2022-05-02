@@ -4,8 +4,9 @@ using UnityEngine;
 namespace PCG
 {
 
-    public class TerrainChunk
+    public class TerrainChunk : MonoBehaviour
     {
+        private string _name = "";
         public event System.Action<TerrainChunk, bool> onVisibilityChanged;
         public Transform _viewer;
         
@@ -13,7 +14,7 @@ namespace PCG
         private Bounds _bounds;
 
         private HeightMap _heightMap;
-        private bool _heightMapReceived;
+        public bool _heightMapReceived;
 
         private MeshRenderer _meshRenderer;
         public MeshFilter _meshFilter;
@@ -39,6 +40,7 @@ namespace PCG
             _viewer = viewer;
             
             _position = coord * _size;
+            _name = $"{_position.x}-{_position.y}";
             _bounds = new Bounds(_position, Vector2.one * _size);
 
             Vector3 positionV3 = new Vector3(_position.x, 0, _position.y);
@@ -108,6 +110,9 @@ namespace PCG
                             _meshFilter.mesh = lodMesh.mesh;
                             _meshCollider = _meshObject.AddComponent<MeshCollider>();
                             _meshCollider.sharedMesh = _meshFilter.mesh;
+                                        
+                            PutPrefabsInMap test = FindObjectOfType<PutPrefabsInMap>();
+                            test.GeneratePrefabs(_meshFilter.mesh, _position);
                         }
                         else if (!lodMesh.hasRequestedMesh)
                         {
