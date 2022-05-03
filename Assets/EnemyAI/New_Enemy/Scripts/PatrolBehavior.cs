@@ -19,12 +19,12 @@ namespace EnemyAI.New_Enemy.Scripts
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             // _timer = 0; todo
-            Transform wayPointsObject = GameObject.FindGameObjectWithTag("WayPoints").transform;
-            foreach (Transform t in wayPointsObject)
-                _wayPoints.Add(t);
+            //Transform wayPointsObject = GameObject.FindGameObjectWithTag("WayPoints").transform;
+            //foreach (Transform t in wayPointsObject)
+            //    _wayPoints.Add(t);
 
-            _agent = animator.GetComponent<NavMeshAgent>();
-            _agent.SetDestination(_wayPoints[0].position);
+            //_agent = animator.GetComponent<NavMeshAgent>();
+            //_agent.SetDestination(_wayPoints[0].position);
 
             _player = GameObject.FindGameObjectWithTag("Player").transform;
         }
@@ -33,8 +33,8 @@ namespace EnemyAI.New_Enemy.Scripts
         {
             if (_agent.remainingDistance <= _agent.stoppingDistance)
             {
-                _agent.SetDestination(_wayPoints[Random.Range(0, _wayPoints.Count)].position);
-                // animator.SetBool(IsPatrolling, false); todo
+                // _agent.SetDestination(_wayPoints[Random.Range(0, _wayPoints.Count)].position);
+                animator.SetBool(IsPatrolling, false); 
             }
 
             //_timer += Time.deltaTime; todo

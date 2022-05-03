@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using PCG.Data;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace PCG
 {
@@ -22,6 +23,8 @@ namespace PCG
         public Transform viewer;
         public Material mapMaterial;
 
+        public NavMeshSurface surface;
+        
         private Vector2 _viewerPosition;
         private Vector2 _viewerPositionOld;
         private int _chunkSize;
@@ -44,6 +47,7 @@ namespace PCG
 
             UpdateVisibleChunks();
             StartCoroutine(UpdatePlayerPosition());
+            surface.BuildNavMesh();
         }
 
         private void Update()
@@ -51,10 +55,10 @@ namespace PCG
             var position = viewer.position;
             _viewerPosition = new Vector2(position.x, position.z);
             
-            if ((_viewerPositionOld - _viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate);
+            if ((_viewerPositionOld - _viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
             {
                 _viewerPositionOld = _viewerPosition;
-                UpdateVisibleChunks();                
+                UpdateVisibleChunks();
             }
         }   
 

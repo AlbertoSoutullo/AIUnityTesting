@@ -11,7 +11,7 @@ public class Player: MonoBehaviour
     public float health, maxHealth;
     public HealthBar healthBar;
 
-    public GameObject hunter;
+    private GameObject hunter;
     
     public static event Action<Player> InstanceStarted;
 
