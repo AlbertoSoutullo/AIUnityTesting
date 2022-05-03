@@ -23,7 +23,7 @@ namespace EnemyAI.New_Enemy.Scripts
             //foreach (Transform t in wayPointsObject)
             //    _wayPoints.Add(t);
 
-            //_agent = animator.GetComponent<NavMeshAgent>();
+            _agent = animator.GetComponent<NavMeshAgent>();
             //_agent.SetDestination(_wayPoints[0].position);
 
             _player = GameObject.FindGameObjectWithTag("Player").transform;
