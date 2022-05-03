@@ -31,8 +31,8 @@ namespace PCG
         private int _chunkSize;
         private int _chunkVisibleInViewDistance;
 
-        private readonly Dictionary<Vector2, TerrainChunk> _terrainChunkDicctionary = new Dictionary<Vector2, TerrainChunk>();
-        private List<TerrainChunk> _terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
+        private readonly Dictionary<Vector2, GameObject> _terrainChunkDicctionary = new Dictionary<Vector2, GameObject>();
+        private List<GameObject> _terrainChunksVisibleLastUpdate = new List<GameObject>();
         
         public LayerMask TerrainLayer;
         
@@ -67,7 +67,7 @@ namespace PCG
         {
             foreach (var terrainChunk in _terrainChunksVisibleLastUpdate)
             {
-                terrainChunk.SetVisible(false);
+                terrainChunk.GetComponent<TerrainChunk>().SetVisible(false);
             }
             _terrainChunksVisibleLastUpdate.Clear();
 
@@ -83,18 +83,16 @@ namespace PCG
 
                     if (_terrainChunkDicctionary.ContainsKey(viewedChunkCoord))
                     {
-                        _terrainChunkDicctionary[viewedChunkCoord].UpdateTerrainChunk();
+                        _terrainChunkDicctionary[viewedChunkCoord].GetComponent<TerrainChunk>().UpdateTerrainChunk();
                     }
                     else
                     {
-                        TerrainChunk newChunk = gameObject.AddComponent<TerrainChunk>();
-                        newChunk.PrepareChunk(viewedChunkCoord, heightMapSettings, _chunkSize, detailLevels, 
+                        GameObject newChunk = Instantiate(terrainChunk, transform);
+                        newChunk.GetComponent<TerrainChunk>().PrepareChunk(viewedChunkCoord, heightMapSettings, _chunkSize, detailLevels, 
                             transform, mapMaterial, viewer);
-                        // TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, _chunkSize,
-                        //     detailLevels, transform, mapMaterial, viewer);
                         _terrainChunkDicctionary.Add(viewedChunkCoord, newChunk);
-                        newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChange;
-                        newChunk.Load();
+                        newChunk.GetComponent<TerrainChunk>().onVisibilityChanged += OnTerrainChunkVisibilityChange;
+                        newChunk.GetComponent<TerrainChunk>().Load();
                     }
                 }
             }
@@ -126,7 +124,7 @@ namespace PCG
             viewer.gameObject.SetActive(true);
         }
 
-        void OnTerrainChunkVisibilityChange(TerrainChunk chunk, bool isVisible)
+        void OnTerrainChunkVisibilityChange(GameObject chunk, bool isVisible)
         {
             if (isVisible) {
                 _terrainChunksVisibleLastUpdate.Add(chunk);
