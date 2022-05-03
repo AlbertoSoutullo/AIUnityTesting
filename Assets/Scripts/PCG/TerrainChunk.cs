@@ -44,6 +44,8 @@ namespace PCG
             Vector3 positionV3 = new Vector3(_position.x, 0, _position.y);
 
             _meshObject = new GameObject("Terrain Chunk");
+            int layer = LayerMask.NameToLayer("Ground");
+            _meshObject.layer = layer;
             _meshRenderer = _meshObject.AddComponent<MeshRenderer>();
             _meshFilter = _meshObject.AddComponent<MeshFilter>();
 
