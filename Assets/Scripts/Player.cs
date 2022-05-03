@@ -13,6 +13,8 @@ public class Player: MonoBehaviour
 
     public GameObject hunter;
     
+    public static event Action<Player> InstanceStarted;
+
     public void TakeDamage(int damage){
         // Use your own damage handling code, or this example one.
         health -= Mathf.Min( damage, health / 4f );            
@@ -20,7 +22,8 @@ public class Player: MonoBehaviour
     }
     
     void Start(){
-        hunter = GameObject.FindGameObjectsWithTag("Hunter")[0];
+        hunter = GameObject.FindGameObjectWithTag("Hunter");
+        InstanceStarted?.Invoke(this);
     }
 
     private void OnTriggerEnter(Collider other)
