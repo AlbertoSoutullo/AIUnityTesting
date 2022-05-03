@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using PCG.Data;
 using Unity.Collections;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace PCG
         private readonly Dictionary<Vector2, TerrainChunk> _terrainChunkDicctionary = new Dictionary<Vector2, TerrainChunk>();
         private List<TerrainChunk> _terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
         
+        public LayerMask TerrainLayer;
         
         private void Start()
         {
@@ -41,6 +43,7 @@ namespace PCG
             _chunkVisibleInViewDistance = Mathf.RoundToInt(MAXViewDistance / _chunkSize);
 
             UpdateVisibleChunks();
+            StartCoroutine(UpdatePlayerPosition());
         }
 
         private void Update()
@@ -87,6 +90,32 @@ namespace PCG
                     }
                 }
             }
+        }
+
+        private IEnumerator UpdatePlayerPosition()
+        {
+            yield return new WaitForSecondsRealtime(1.5f);
+            
+            // Bit shift the index of the layer (8) to get a bit mask
+            int layerMask = 1 << 3;
+            
+            float positionYPlayer = 0;
+            float positionYHunter = 0;
+            RaycastHit hit;
+            
+            if (Physics.Raycast(new Vector3(0, 9999f, 0), Vector3.down,
+                out hit, Mathf.Infinity, TerrainLayer))
+            {
+                Debug.Log("HIT");
+                positionYPlayer = hit.point.y;
+            }
+
+            positionYPlayer += 1.5f / 2; // model scale is not correct, so distance is manually added
+            
+            Vector3 positionPlayer = new Vector3(0, positionYPlayer, 0);
+
+            viewer.position = positionPlayer;
+            viewer.gameObject.SetActive(true);
         }
 
         void OnTerrainChunkVisibilityChange(TerrainChunk chunk, bool isVisible)
