@@ -10,7 +10,7 @@ namespace PCG
         public event System.Action<TerrainChunk, bool> onVisibilityChanged;
         public Transform _viewer;
         
-        private readonly GameObject _meshObject;
+        private GameObject _meshObject;
         private Bounds _bounds;
 
         private HeightMap _heightMap;
@@ -31,7 +31,7 @@ namespace PCG
         private Vector2 _position;
         
         
-        public TerrainChunk(Vector2 coord, HeightMapSettings settings, int size, LODInfo[] detailLevels, 
+        public void PrepareChunk(Vector2 coord, HeightMapSettings settings, int size, LODInfo[] detailLevels, 
             Transform parent, Material material, Transform viewer)
         {
             _heightMapSettings = settings;
@@ -112,9 +112,9 @@ namespace PCG
                             _meshFilter.mesh = lodMesh.mesh;
                             _meshCollider = _meshObject.AddComponent<MeshCollider>();
                             _meshCollider.sharedMesh = _meshFilter.mesh;
-                                        
+
                             PutPrefabsInMap test = FindObjectOfType<PutPrefabsInMap>();
-                            test.GeneratePrefabs(_meshFilter.mesh, _position);
+                            test.GeneratePrefabs(_meshFilter.mesh, _position, gameObject.transform);
                         }
                         else if (!lodMesh.hasRequestedMesh)
                         {

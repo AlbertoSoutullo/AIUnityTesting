@@ -12,7 +12,7 @@ namespace PCG
         public PrefabsData _prefabsData;
         public HeightMapSettings heightMapSettings;
         
-        public void GeneratePrefabs(Mesh meshData, Vector2 position)
+        public void GeneratePrefabs(Mesh meshData, Vector2 position, Transform parent)
         {
             Vector3 chunkOffset = new Vector3(position.x, 0, position.y);
             // loop through all triangles and select the positions to where instantiate prefabs
@@ -32,11 +32,11 @@ namespace PCG
                 241, heightMapSettings.heightMultiplier, positions, _prefabsData);
         
             // instantiate the prefabs
-            InstantiatePrefabs(prefabsInternalData);
+            InstantiatePrefabs(prefabsInternalData, parent);
         }
         
         // todo : move this out
-        public void InstantiatePrefabs(PrefabsInternalData prefabsInternalData)
+        public void InstantiatePrefabs(PrefabsInternalData prefabsInternalData, Transform parent)
         {
             Debug.Log("All prefabs to instantiate: " + prefabsInternalData.prefabsPositions.Count);
             List<Tuple<int, int>> prefabsPositions = prefabsInternalData.prefabsPositions;
@@ -46,6 +46,7 @@ namespace PCG
             for (int i = 0; i < prefabsInternalData.transformsNames.Length; ++i)
             {
                 parents[i] = new GameObject(prefabsInternalData.transformsNames[i]);
+                parents[i].transform.SetParent(parent);
             }
         
             // instantiate all prefabs

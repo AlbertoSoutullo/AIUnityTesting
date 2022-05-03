@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -17,9 +18,14 @@ public class CameraMovement : MonoBehaviour
         target = GameObject.FindWithTag("Player");
         if (target == null)
         {
+            Debug.Log("Player still not instantiated");
             Player.InstanceStarted += OnPlayerInstanceStarted;
             GameObject emptyGO = new GameObject();
             _targetTransform = emptyGO.transform;
+        }
+        else
+        {
+            _targetTransform = target.transform;
         }
     }
     

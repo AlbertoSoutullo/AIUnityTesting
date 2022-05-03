@@ -30,7 +30,7 @@ namespace PCG
             MeshData mesh = MeshGenerator.GenerateTerrainMesh(heightMap.values, editorPreviewLOD);
             DrawMesh(mesh);
             PutPrefabsInMap test = FindObjectOfType<PutPrefabsInMap>();
-            test.GeneratePrefabs(meshFilter.mesh, Vector2.zero);
+            // test.GeneratePrefabs(meshFilter.mesh, Vector2.zero);
         }
 
         private void DrawMesh(MeshData meshData) {

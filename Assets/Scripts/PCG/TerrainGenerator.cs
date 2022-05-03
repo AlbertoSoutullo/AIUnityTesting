@@ -17,7 +17,8 @@ namespace PCG
         public HeightMapSettings heightMapSettings;
         public TextureData textureSettings;
         public MeshSettings meshSettings;
-
+        public GameObject terrainChunk;
+        
         public LODInfo[] detailLevels;
 
         public Transform viewer;
@@ -54,7 +55,7 @@ namespace PCG
         {
             var position = viewer.position;
             _viewerPosition = new Vector2(position.x, position.z);
-            
+
             if ((_viewerPositionOld - _viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
             {
                 _viewerPositionOld = _viewerPosition;
@@ -86,8 +87,11 @@ namespace PCG
                     }
                     else
                     {
-                        TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, _chunkSize,
-                            detailLevels, transform, mapMaterial, viewer);
+                        TerrainChunk newChunk = gameObject.AddComponent<TerrainChunk>();
+                        newChunk.PrepareChunk(viewedChunkCoord, heightMapSettings, _chunkSize, detailLevels, 
+                            transform, mapMaterial, viewer);
+                        // TerrainChunk newChunk = new TerrainChunk(viewedChunkCoord, heightMapSettings, _chunkSize,
+                        //     detailLevels, transform, mapMaterial, viewer);
                         _terrainChunkDicctionary.Add(viewedChunkCoord, newChunk);
                         newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChange;
                         newChunk.Load();
