@@ -16,7 +16,6 @@ public class Player: MonoBehaviour
     public static event Action<Player> InstanceStarted;
 
     public void TakeDamage(int damage){
-        // Use your own damage handling code, or this example one.
         health -= Mathf.Min( damage, health / 4f );            
         healthBar.UpdateHealthBar();
     }
@@ -24,8 +23,15 @@ public class Player: MonoBehaviour
     void Start(){
         hunter = GameObject.FindGameObjectWithTag("Hunter");
         InstanceStarted?.Invoke(this);
+        CompanionMovement.InstanceStarted += OnHunterInstanceStarted;
     }
 
+    private void OnHunterInstanceStarted(CompanionMovement instance)
+    {
+        CompanionMovement.InstanceStarted -= OnHunterInstanceStarted;
+        hunter = instance.gameObject;
+    }
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.name == "ArrowSpawned(Clone)")
