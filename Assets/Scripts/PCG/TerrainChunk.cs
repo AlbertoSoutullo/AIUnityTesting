@@ -1,4 +1,5 @@
 ﻿using PCG.Data;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace PCG
@@ -7,10 +8,10 @@ namespace PCG
     public class TerrainChunk : MonoBehaviour
     {
         private string _name = "";
-        public event System.Action<TerrainChunk, bool> onVisibilityChanged;
+        public event System.Action<GameObject, bool> onVisibilityChanged;
         public Transform _viewer;
         
-        private readonly GameObject _meshObject;
+        private Mesh _mesh;
         private Bounds _bounds;
 
         private HeightMap _heightMap;
@@ -31,7 +32,7 @@ namespace PCG
         private Vector2 _position;
         
         
-        public TerrainChunk(Vector2 coord, HeightMapSettings settings, int size, LODInfo[] detailLevels, 
+        public void PrepareChunk(Vector2 coord, HeightMapSettings settings, int size, LODInfo[] detailLevels, 
             Transform parent, Material material, Transform viewer)
         {
             _heightMapSettings = settings;
@@ -40,20 +41,19 @@ namespace PCG
             _viewer = viewer;
             
             _position = coord * _size;
-            _name = $"{_position.x}-{_position.y}";
+            _name = $"{_position.x}:{_position.y}";
             _bounds = new Bounds(_position, Vector2.one * _size);
 
             Vector3 positionV3 = new Vector3(_position.x, 0, _position.y);
-
-            _meshObject = new GameObject("Terrain Chunk");
+            
             int layer = LayerMask.NameToLayer("Ground");
-            _meshObject.layer = layer;
-            _meshRenderer = _meshObject.AddComponent<MeshRenderer>();
-            _meshFilter = _meshObject.AddComponent<MeshFilter>();
+            gameObject.layer = layer;
+            _meshRenderer = GetComponent<MeshRenderer>();
+            _meshFilter = GetComponent<MeshFilter>();
 
             _meshRenderer.material = material;
-            _meshObject.transform.position = positionV3;
-            _meshObject.transform.parent = parent;
+            transform.position = positionV3;
+            transform.parent = parent;
             SetVisible(false);
 
             _lodMeshes = new LODMesh[detailLevels.Length];
@@ -110,11 +110,11 @@ namespace PCG
                         {
                             previousLODIndex = lodIndex;
                             _meshFilter.mesh = lodMesh.mesh;
-                            _meshCollider = _meshObject.AddComponent<MeshCollider>();
+                            _meshCollider = gameObject.AddComponent<MeshCollider>();
                             _meshCollider.sharedMesh = _meshFilter.mesh;
-                                        
+
                             PutPrefabsInMap test = FindObjectOfType<PutPrefabsInMap>();
-                            test.GeneratePrefabs(_meshFilter.mesh, _position);
+                            test.GeneratePrefabs(_meshFilter.mesh, _position, gameObject.transform);
                         }
                         else if (!lodMesh.hasRequestedMesh)
                         {
@@ -127,7 +127,7 @@ namespace PCG
                         SetVisible(visible);
                         if (onVisibilityChanged != null)
                         {
-                            onVisibilityChanged(this, visible);
+                            onVisibilityChanged(gameObject, visible);
                         }
                     }
 
@@ -138,12 +138,12 @@ namespace PCG
 
         public void SetVisible(bool visible)
         {
-            _meshObject.SetActive(visible);
+            gameObject.SetActive(visible);
         }
         
         public bool IsVisible()
         {
-            return _meshObject.activeSelf;
+            return gameObject.activeSelf;
         }
     }
     

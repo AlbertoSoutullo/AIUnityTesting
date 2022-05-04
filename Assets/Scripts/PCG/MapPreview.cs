@@ -15,6 +15,8 @@ namespace PCG
         public int editorPreviewLOD;
         public bool autoUpdate;
 
+        public bool autoInstantiatePrefabs = false;
+
         public MeshSettings meshSettings;
         public HeightMapSettings heightMapSettings;
         public TextureData textureData;
@@ -30,7 +32,13 @@ namespace PCG
             MeshData mesh = MeshGenerator.GenerateTerrainMesh(heightMap.values, editorPreviewLOD);
             DrawMesh(mesh);
             PutPrefabsInMap test = FindObjectOfType<PutPrefabsInMap>();
-            test.GeneratePrefabs(meshFilter.mesh, Vector2.zero);
+            if (autoInstantiatePrefabs)
+            {
+                foreach (Transform child in meshFilter.gameObject.transform) {
+                    DestroyImmediate(child.gameObject);
+                }
+                test.GeneratePrefabs(meshFilter.mesh, Vector2.zero, meshFilter.gameObject.transform);
+            }
         }
 
         private void DrawMesh(MeshData meshData) {
