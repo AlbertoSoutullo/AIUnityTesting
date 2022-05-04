@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 namespace HunterAI.Scripts
 {
@@ -26,6 +28,8 @@ namespace HunterAI.Scripts
 		private CustomFiniteStateMachine<CompanionMovement> _stateMachine;
 
 		private static readonly int SpeedForAnimations = Animator.StringToHash("speed");
+		
+		public static event Action<CompanionMovement> InstanceStarted;
 		
 		public Transform GetPlayer()
 		{
@@ -213,6 +217,7 @@ namespace HunterAI.Scripts
 
 			_stateMachine = new CustomFiniteStateMachine<CompanionMovement>(this);
 			GetFsm().ChangeState(IdleState.instance);
+			InstanceStarted?.Invoke(this);
 		}
 		
 		void Update ()
