@@ -40,7 +40,7 @@ namespace PCG
             _detailLevels = detailLevels;
             _viewer = viewer;
             
-            _position = coord * _size;
+            _position = coord * (_size-1);
             _name = $"{_position.x}:{_position.y}";
             _bounds = new Bounds(_position, Vector2.one * _size);
 

@@ -21,7 +21,7 @@ namespace PCG
             float maxNoiseHeight = float.MinValue;
             float minNoiseHeight = float.MaxValue;
             
-            Vector2[] octaveOffsets = NavigateThroughNoiseMap(settings.octaves, settings.offset, rng, amplitude, 
+            Vector2[] octaveOffsets = NavigateThroughNoiseMap(settings.octaves, settings.offset, rng, ref amplitude, 
                 settings.persistance, ref maxPossibleHeight, sampleCentre);
 
             noiseMap = FillNoiseMap(mapHeight, mapWidth, settings, octaveOffsets, noiseMap, ref maxNoiseHeight, 
@@ -64,6 +64,7 @@ namespace PCG
             if (noiseHeight < minLocalNoiseHeight) {
                 minLocalNoiseHeight = noiseHeight;
             }
+            
             return noiseHeight;
         }
 
@@ -91,16 +92,16 @@ namespace PCG
                 }
             }
 
-            return noiseMap;
+            return noiseMap; 
         }
 
-        private static float[,] NormalizeNoiseMap( float[,] noiseMap, int mapHeight, int mapWidth, 
+        private static float[,] NormalizeNoiseMap(float[,] noiseMap, int mapHeight, int mapWidth, 
             float minLocalNoiseHeight, float maxLocalNoiseHeight, NormalizeMode normalizeMode)
         {
             if (normalizeMode == NormalizeMode.Local) {
                 for (int y = 0; y < mapHeight; y++) {
                     for (int x = 0; x < mapWidth; x++) {
-                        noiseMap [x, y] = Mathf.InverseLerp (minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap [x, y]);
+                        noiseMap[x, y] = Mathf.InverseLerp (minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap [x, y]);
                     }
                 }
             }
@@ -109,7 +110,7 @@ namespace PCG
         }
 
         private static Vector2[] NavigateThroughNoiseMap(int octaves, Vector2 offset, System.Random rng, 
-            float amplitude, float persistance, ref float maxPossibleHeight, Vector2 sampleCentre){
+            ref float amplitude, float persistance, ref float maxPossibleHeight, Vector2 sampleCentre){
             Vector2[] octaveOffsets = new Vector2[octaves];
             
             for (int i = 0; i < octaves; i++) {
