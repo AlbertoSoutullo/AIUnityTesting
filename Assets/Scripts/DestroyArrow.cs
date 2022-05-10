@@ -19,5 +19,4 @@ public class DestroyArrow : MonoBehaviour
     {
         Destroy(gameObject);
     }
-    
 }
