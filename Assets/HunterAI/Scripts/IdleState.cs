@@ -18,7 +18,7 @@ namespace HunterAI.Scripts
         {
             companion.StopWalking();
 
-            if (companion.DistanceWithPlayer() >= companion.playerMaxDistance)
+            if (companion.DistanceWithPlayer() >= companion.playerMaxDistanceToRun)
             {
                 Debug.Log("Too far from player so changing to FollowPlayerState");
                 companion.GetFsm().ChangeState(FollowPlayerState.instance);

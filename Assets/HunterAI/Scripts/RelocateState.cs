@@ -26,12 +26,12 @@ public class RelocateState : FsmState<CompanionMovement>
 				desiredLocation =
 					companion.GetPlayer().position
 					+ (companion.GetCurrentTarget().transform.position - companion.GetPlayer().position)
-					* companion.playerMaxDistance / (companion.playerMaxDistance + companion.weaponRangeDistance);
+					* companion.playerMaxDistanceToRun / (companion.playerMaxDistanceToRun + companion.weaponRangeDistance);
 				desiredLocationSet = true;
 			}
 
 			else
-				companion.WalkTo(desiredLocation);
+				companion.WalkTo(desiredLocation, true);
 			if (Vector3.Distance(desiredLocation, companion.transform.position) < 1)
 			{
 				Debug.Log("Arrived in desired location so changing to AttackState");

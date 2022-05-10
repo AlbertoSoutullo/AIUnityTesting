@@ -11,7 +11,8 @@ namespace HunterAI.Scripts
 {
 	public class CompanionMovement : MonoBehaviour
 	{
-		public float playerMaxDistance = 5;
+		public float playerMaxDistanceToRun = 10f;
+		public float playerMaxDistanceToWalk = 5f;
 		public float weaponRangeDistance = 8;
 		public int arrows = 10;
 		public float visionRangeDistance = 25;
@@ -61,7 +62,7 @@ namespace HunterAI.Scripts
 		{
 			return GameObject.FindGameObjectsWithTag("Enemy")
 				.Where(enemy => Vector3.Distance(transform.position, enemy.transform.position) < visionRangeDistance
-				                && Vector3.Distance(_player.position, enemy.transform.position) < (weaponRangeDistance + playerMaxDistance));
+				                && Vector3.Distance(_player.position, enemy.transform.position) < (weaponRangeDistance + playerMaxDistanceToRun));
 		}
 
 		public IEnumerable<GameObject> ExistingArrows()
@@ -120,13 +121,19 @@ namespace HunterAI.Scripts
 		public void StopWalking()
 		{
 			_navMeshAgent.SetDestination(transform.position);
+			_rigidbody.velocity = Vector3.zero;
 			_animationController.SetFloat(SpeedForAnimations, 0);
+			_animationController.SetBool("isFollowing", false);
+			_animationController.SetBool("running", false);
 		}
 		
-		public void WalkTo(Vector3 destination)
+		public void WalkTo(Vector3 destination, bool running)
 		{
+			_animationController.SetFloat("speed", _rigidbody.velocity.sqrMagnitude);
+			_animationController.SetBool("isFollowing", true);
+			if (running)
+				_animationController.SetBool("running", true);
 			_navMeshAgent.SetDestination(destination);
-			_animationController.SetFloat("speed", _rigidbody.velocity.magnitude);
 			transform.LookAt(destination);
 		}
 
@@ -160,7 +167,7 @@ namespace HunterAI.Scripts
 		{
 			_animationController.SetBool("noAmmo", true);
 		}
-
+		
 		public void FinishPointing()
 		{
 			_animationController.SetBool("noAmmo", false);

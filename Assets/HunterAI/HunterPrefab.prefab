@@ -686,12 +686,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82297e2ef4e7b5944a81ca976e9e576d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMaxDistance: 5
+  playerMaxDistanceToRun: 10
+  playerMaxDistanceToWalk: 5
   weaponRangeDistance: 8
   arrows: 1
   visionRangeDistance: 25
   weaponIsCharged: 1
-  currentTarget: {fileID: 0}
+  movementRefreshTime: 2
   radius: 5
 --- !u!114 &2807858161477000540
 MonoBehaviour:

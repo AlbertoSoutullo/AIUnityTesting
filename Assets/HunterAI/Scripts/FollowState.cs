@@ -19,12 +19,15 @@ namespace HunterAI.Scripts
 
         public override void Execute(CompanionMovement companion)
         {
-            if (companion.DistanceWithPlayer() >= companion.playerMaxDistance)
+            if (companion.DistanceWithPlayer() >= companion.playerMaxDistanceToWalk)
             {
                 if (!NeedsToBeRedirected(companion)) return;
-                
+                Debug.Log("Following player");
                 Vector3 positionToWalk = companion.GetRandomPositionWithinPlayerRange();
-                companion.WalkTo(positionToWalk);
+                if (companion.DistanceWithPlayer() >= companion.playerMaxDistanceToRun)
+                    companion.WalkTo(positionToWalk, true);
+                else
+                    companion.WalkTo(positionToWalk, false);
                 _lastTimeChecked = Time.time;
             }
             
@@ -41,7 +44,11 @@ namespace HunterAI.Scripts
             }
         }
 
-        public override void Exit(CompanionMovement companion) {}
+        public override void Exit(CompanionMovement companion)
+        {
+            Debug.Log("Exit following");
+            companion.StopWalking();
+        }
 
         private bool NeedsToBeRedirected(CompanionMovement companion)
         {
