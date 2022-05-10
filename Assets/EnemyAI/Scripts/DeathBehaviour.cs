@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
-namespace EnemyAI.New_Enemy.Scripts
+namespace EnemyAI.Scripts
 {
     public class DeathBehaviour : StateMachineBehaviour
     {
@@ -12,11 +11,6 @@ namespace EnemyAI.New_Enemy.Scripts
             animator.SetBool(IsDead, true);
             Destroy(animator.GetComponent<Rigidbody>());
             animator.GetComponent<CapsuleCollider>().enabled = false;
-        }
-
-        public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-            base.OnStateUpdate(animator, stateInfo, layerIndex);
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

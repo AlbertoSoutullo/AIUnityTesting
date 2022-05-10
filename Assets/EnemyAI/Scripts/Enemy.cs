@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace EnemyAI.New_Enemy.Scripts
+namespace EnemyAI.Scripts
 {
     public class Enemy : MonoBehaviour
     {
@@ -10,75 +10,72 @@ namespace EnemyAI.New_Enemy.Scripts
         public GameObject arrowToSpawn;
         
         private Animator _animator;
-        private NavMeshAgent _navMeshAgent;
-        
+
         private static readonly int IsDead = Animator.StringToHash("isDead");
         private static readonly int Damaged = Animator.StringToHash("Damaged"); 
 
         private void Start()
         {
             _animator = GetComponent<Animator>();
-            _navMeshAgent = GetComponent<NavMeshAgent>();
         }
 
-        private void TakeDamageFromArrow(int damageAmount)
+        public void TakeDamage(int damageAmount)
         {
             enemyHp -= damageAmount;
             
-            if(enemyHp <= 0)
+            if(IsEnemyDead())
             {
                 GetComponent<CapsuleCollider>().enabled = false;
-                SpawnArrows();
+                SpawnArrow();
                 _animator.SetBool(IsDead, true);
-                // GetComponent<CapsuleCollider>().enabled = false;
             }
             else
-            {
                 _animator.SetTrigger(Damaged);
-            }
         }
 
-        public void DoDamage()
+        private bool IsEnemyDead()
         {
-            var boxCollider = GetComponent<BoxCollider>();
-            boxCollider.enabled = true;
+            return (enemyHp <= 0);
+        }
 
-            Collider[] cols = Physics.OverlapBox(boxCollider.bounds.center, boxCollider.bounds.extents, boxCollider.transform.rotation);
-
-            foreach (Collider c in cols)
-            {
-                if (c.gameObject.name == "child")
-                {
-                    c.gameObject.GetComponent<Player>().TakeDamage(attackDamage);
-                }
-            }
+        public void DoDamageAnimationEvent()
+        {
+            BoxCollider boxCollider = EnableHitBox();
+            Collider[] cols = DetectHits(boxCollider);
+            ApplyDamage(cols);
 
             boxCollider.enabled = false;
         }
-
-        public void DeathTrigger()
+        
+        private BoxCollider EnableHitBox()
         {
-            Destroy(gameObject);
+            BoxCollider boxCollider = GetComponent<BoxCollider>();
+            boxCollider.enabled = true;
+
+            return boxCollider;
         }
 
-        private void OnTriggerEnter(Collider other)
+        private Collider[] DetectHits(BoxCollider boxCollider)
         {
-            if (other.name != "Arrow(Clone)") return;
-            if (enemyHp < 0) return;
-            
-            TakeDamageFromArrow(100);
-            _navMeshAgent.speed /= 2;
+            var bounds = boxCollider.bounds;
+            Collider[] cols = Physics.OverlapBox(bounds.center, bounds.extents, 
+                boxCollider.transform.rotation);
+
+            return cols;
         }
 
-        private void SpawnArrows()
+        private void ApplyDamage(Collider[] cols)
         {
-            Vector3 newPosition = transform.root.position;
-            Debug.Log($"in spawn: {newPosition}");
-            //newPosition.y = 1.5f;
-            
+            foreach (Collider c in cols)
+            {
+                if (c.gameObject.name == "child")
+                    c.gameObject.GetComponent<Player>().TakeDamage(attackDamage);
+            }
+        }
+
+        private void SpawnArrow()
+        {
             Instantiate(arrowToSpawn, transform.position, Quaternion.identity);
-            Debug.Log($"after spawn: {transform.position}");
         }
-    
     }
 }
