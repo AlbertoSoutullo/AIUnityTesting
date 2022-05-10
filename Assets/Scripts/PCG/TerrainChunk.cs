@@ -110,7 +110,12 @@ namespace PCG
                         {
                             previousLODIndex = lodIndex;
                             _meshFilter.mesh = lodMesh.mesh;
+                            
+                            //GetComponent<MeshCollider>().sharedMesh = null;
+                            //GetComponent<MeshCollider>().sharedMesh = meshFilter.mesh;
+                            
                             _meshCollider = gameObject.AddComponent<MeshCollider>();
+                            _meshCollider.sharedMesh = null;
                             _meshCollider.sharedMesh = _meshFilter.mesh;
 
                             PutPrefabsInMap test = FindObjectOfType<PutPrefabsInMap>();
