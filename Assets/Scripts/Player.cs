@@ -1,17 +1,16 @@
+// Unity Imports
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using HunterAI.Scripts;
 using UnityEngine;
-using Object = System.Object;
-using Random = UnityEngine.Random;
+
+// Project Imports
+using HunterAI.Scripts;
 
 public class Player: MonoBehaviour
 {
-    public float health, maxHealth;
+    public float health, maxHealth = 100;
     public HealthBar healthBar;
 
-    private GameObject hunter;
+    private GameObject _hunter;
     
     public static event Action<Player> InstanceStarted;
 
@@ -21,24 +20,32 @@ public class Player: MonoBehaviour
     }
     
     void Start(){
-        hunter = GameObject.FindGameObjectWithTag("Hunter");
-        InstanceStarted?.Invoke(this);
+        NotifyPlayerHasBeenInstantiated();
+        ObserveForHunterInstantiation();
+    }
+
+    private void ObserveForHunterInstantiation()
+    {
         CompanionMovement.InstanceStarted += OnHunterInstanceStarted;
     }
 
     private void OnHunterInstanceStarted(CompanionMovement instance)
     {
         CompanionMovement.InstanceStarted -= OnHunterInstanceStarted;
-        hunter = instance.gameObject;
+        _hunter = instance.gameObject;
     }
-    
+
+    private void NotifyPlayerHasBeenInstantiated()
+    {
+        InstanceStarted?.Invoke(this);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.name == "ArrowSpawned(Clone)")
         {
-            hunter.GetComponent<CompanionMovement>().arrows += 1;
+            _hunter.GetComponent<CompanionMovement>().arrows += 1;
             Destroy(other.gameObject);
         }
     }
-    
 }

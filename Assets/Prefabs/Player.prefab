@@ -1003,7 +1003,7 @@ GameObject:
   - component: {fileID: 800103297523605351}
   - component: {fileID: -7577224034948568327}
   m_Layer: 6
-  m_Name: child
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1089,8 +1089,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d941850e1e50ce84a95130a5c2c2acb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 300
+  physicsVelocity: 300
   rotationSpeed: 720
+  runSpeedIncrement: 1.5
 --- !u!114 &8606215175336310180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1122,9 +1123,9 @@ MonoBehaviour:
     m_Bits: 8
   Enemy: {fileID: 1932402746202957328, guid: 0f713e0aece33dc44afa38bda23c498d, type: 3}
   hunter: {fileID: 1740264005145846946, guid: b80376040ee976d4e9eb32972c61e744, type: 3}
-  maxRadious: 40
-  minSpawnTime: 15
-  maxSpawnTime: 30
+  maxRadious: 20
+  minSpawnTime: 2
+  maxSpawnTime: 5
 --- !u!136 &800103297523605351
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2531,7 +2532,6 @@ MonoBehaviour:
   player: {fileID: 4000403130444358982}
   fullColor: {r: 0, g: 1, b: 0.3233118, a: 1}
   lowColor: {r: 0.8773585, g: 0.20769063, b: 0.120016046, a: 1}
-  Camera: {fileID: 7742830597722940148, guid: 0ffbe2e6b9950fc408cd8df149474db4, type: 3}
 --- !u!1 &9063612008385877839
 GameObject:
   m_ObjectHideFlags: 0
