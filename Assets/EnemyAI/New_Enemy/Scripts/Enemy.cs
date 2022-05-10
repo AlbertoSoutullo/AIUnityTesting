@@ -47,7 +47,7 @@ namespace EnemyAI.New_Enemy.Scripts
 
             foreach (Collider c in cols)
             {
-                if (c.gameObject.name == "RedRidingHood")
+                if (c.gameObject.name == "child")
                 {
                     c.gameObject.GetComponent<Player>().TakeDamage(attackDamage);
                 }
