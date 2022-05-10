@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿// Unity Imports
+using UnityEngine;
+
+// Project Imports
+using CustomFSM;
 
 namespace HunterAI.Scripts
 {

@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿// Unity Imports
+using UnityEngine;
 
+// Project Imports
+using CustomFSM;
 namespace HunterAI.Scripts
 {
 public class RelocateState : FsmState<CompanionMovement>
@@ -36,7 +39,7 @@ public class RelocateState : FsmState<CompanionMovement>
 			{
 				Debug.Log("Arrived in desired location so changing to AttackState");
 				companion.StopWalking();
-				companion.GetFsm().ChangeState(AttackState.instance);
+				companion.GetFsm().ChangeState(AttackState.Instance);
 			}
 		}
 

@@ -1,5 +1,9 @@
-﻿using UnityEngine;
+﻿// Unity Imports
+using UnityEngine;
 using System.Linq;
+
+// Project Imports
+using CustomFSM;
 
 namespace HunterAI.Scripts
 {
@@ -21,7 +25,7 @@ namespace HunterAI.Scripts
             if (companion.DistanceWithPlayer() >= companion.playerMaxDistanceToRun)
             {
                 Debug.Log("Too far from player so changing to FollowPlayerState");
-                companion.GetFsm().ChangeState(FollowPlayerState.instance);
+                companion.GetFsm().ChangeState(FollowPlayerState.Instance);
             }
             
             else if (companion.arrows < 1)
@@ -33,7 +37,7 @@ namespace HunterAI.Scripts
             else if (companion.EnemiesThatCanBeAttacked().Any())
             {
                 Debug.Log("An enemy can be attacked so changing to FollowPlayerState");
-                companion.GetFsm().ChangeState(ChooseTargetState.instance);
+                companion.GetFsm().ChangeState(ChooseTargetState.Instance);
             }
         }
 

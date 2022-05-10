@@ -1,5 +1,9 @@
-﻿using System.Linq;
+﻿// Unity Imports
 using UnityEngine;
+using System.Linq;
+
+// Project Imports
+using CustomFSM;
 
 namespace HunterAI.Scripts
 {
@@ -7,7 +11,7 @@ namespace HunterAI.Scripts
     {
         private float _lastTimeChecked;
         
-        public static FollowPlayerState instance { get; } = new FollowPlayerState();
+        public static FollowPlayerState Instance { get; } = new FollowPlayerState();
 
         static FollowPlayerState() {}
 
@@ -34,7 +38,7 @@ namespace HunterAI.Scripts
             else if (companion.EnemiesThatCanBeAttacked().Any())
             {
                 Debug.Log("While following, Hunter can attack");
-                companion.GetFsm().ChangeState(ChooseTargetState.instance);
+                companion.GetFsm().ChangeState(ChooseTargetState.Instance);
             }
             
             else

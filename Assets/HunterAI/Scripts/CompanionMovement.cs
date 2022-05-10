@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using CustomFSM;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 namespace HunterAI.Scripts
@@ -195,7 +195,7 @@ namespace HunterAI.Scripts
 				else if (currentClosestEnemy != _currentTarget)
 				{
 					Debug.Log("Current target is no longer the closest so changing to ChooseTargetState");
-					GetFsm().ChangeState(ChooseTargetState.instance);
+					GetFsm().ChangeState(ChooseTargetState.Instance);
 				}
 				else
 				{
@@ -205,7 +205,7 @@ namespace HunterAI.Scripts
 						GetFsm().ChangeState(RelocateState.Instance);
 					}
 					else
-						GetFsm().ChangeState(AttackState.instance);
+						GetFsm().ChangeState(AttackState.Instance);
 					// else
 					// {
 					// Debug.Log("In current target's range so keeping in AttackState");

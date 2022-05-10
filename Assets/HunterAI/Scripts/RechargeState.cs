@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿// Unity Imports
+using UnityEngine;
+
+// Project Imports
+using CustomFSM;
 
 namespace HunterAI.Scripts
 {
@@ -22,7 +26,7 @@ namespace HunterAI.Scripts
                 companion.weaponIsCharged = true;
             }
             Debug.Log("Weapon is charged so changing to AttackState");
-            companion.GetFsm().ChangeState(AttackState.instance);
+            companion.GetFsm().ChangeState(AttackState.Instance);
         }
 
         public override void Exit(CompanionMovement companion) {}
