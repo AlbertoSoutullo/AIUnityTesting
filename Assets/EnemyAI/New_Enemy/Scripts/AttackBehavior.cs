@@ -34,6 +34,7 @@ namespace EnemyAI.New_Enemy.Scripts
     
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            if (animator.GetBool(IsDead)) return;
             animator.GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
         }
     }
