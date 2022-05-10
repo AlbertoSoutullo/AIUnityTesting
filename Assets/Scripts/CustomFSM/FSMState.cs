@@ -1,4 +1,4 @@
-namespace HunterAI.Scripts
+namespace CustomFSM
 {
 	public abstract class FsmState <T>   {
 		public abstract void Enter (T entity);
