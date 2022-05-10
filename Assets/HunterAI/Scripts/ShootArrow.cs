@@ -19,6 +19,7 @@ namespace HunterAI.Scripts
             Vector3 target = fsm.GetCurrentTarget().transform.position - transform.position;
         
             arrow.GetComponent<Rigidbody>().AddForce(target * launchVelocity);
+            gameObject.transform.LookAt(target);
 
             // Physics.IgnoreCollision(arrow.GetComponent<Collider>(), GetComponent<Collider>());
         }
