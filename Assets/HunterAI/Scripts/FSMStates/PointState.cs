@@ -4,19 +4,23 @@ using UnityEngine;
 // Project Imports
 using CustomFSM;
 
-namespace HunterAI.Scripts
+namespace HunterAI.Scripts.FSMStates
 {
-    public class PointState : FsmState<CompanionMovement>
+    public class PointState : FsmState<Companion>
     {
+        private CompanionMovement _movement;
+        private CompanionLogic _logic;
+        
         public static PointState instance { get; } = new PointState();
 
         private GameObject _arrow;
         static PointState() {}
 
-        public override void Enter(CompanionMovement companion)
+        public override void Enter(Companion companion)
         {
-            // Debug.Log("Entering PointState");
-            _arrow = companion.GetClosestArrow();
+            Debug.Log("Entering PointState");
+            _logic = companion.GetLogic();
+            _arrow = _logic.GetClosestArrow();
             if (_arrow != null)
             {
                 companion.transform.LookAt(_arrow.transform.position);
@@ -24,7 +28,7 @@ namespace HunterAI.Scripts
             }
         }
 
-        public override void Execute(CompanionMovement companion)
+        public override void Execute(Companion companion)
         {
             Debug.Log("Executing in point state");
             if (_arrow != null)
@@ -36,9 +40,6 @@ namespace HunterAI.Scripts
                 companion.GetFsm().ChangeState(IdleState.instance);
         }
 
-        public override void Exit(CompanionMovement companion)
-        {
-            Debug.Log("EXITING POINT STATE");
-        }
+        public override void Exit(Companion companion) { }
     }
 }

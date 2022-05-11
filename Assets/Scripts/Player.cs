@@ -26,12 +26,12 @@ public class Player: MonoBehaviour
 
     private void ObserveForHunterInstantiation()
     {
-        CompanionMovement.InstanceStarted += OnHunterInstanceStarted;
+        Companion.InstanceStarted += OnHunterInstanceStarted;
     }
 
-    private void OnHunterInstanceStarted(CompanionMovement instance)
+    private void OnHunterInstanceStarted(Companion instance)
     {
-        CompanionMovement.InstanceStarted -= OnHunterInstanceStarted;
+        Companion.InstanceStarted -= OnHunterInstanceStarted;
         _hunter = instance.gameObject;
     }
 
@@ -44,7 +44,7 @@ public class Player: MonoBehaviour
     {
         if (other.name == "ArrowSpawned(Clone)")
         {
-            _hunter.GetComponent<CompanionMovement>().arrows += 1;
+            _hunter.GetComponent<Companion>().arrows += 1;
             Destroy(other.gameObject);
         }
     }
