@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace PCG
 {
@@ -8,6 +7,5 @@ namespace PCG
         void Start () {
             gameObject.SetActive (false);
         }
-
     }
 }

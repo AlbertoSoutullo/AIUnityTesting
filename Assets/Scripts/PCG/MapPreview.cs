@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
-using PCG.Data;
+// Unity Imports
 using UnityEngine;
-using UnityEngine.AI;
+
+//Project Imports
+using PCG.Data;
 
 namespace PCG
 {
@@ -15,29 +15,32 @@ namespace PCG
         public int editorPreviewLOD;
         public bool autoUpdate;
 
-        public bool autoInstantiatePrefabs = false;
+        public bool autoInstantiatePrefabs;
 
         public MeshSettings meshSettings;
         public HeightMapSettings heightMapSettings;
         public TextureData textureData;
         public Material terrainMaterial;
 
-        // public NavMeshSurface surface; todo
-        
-        public void DrawMapInEditor() {
+        public void DrawMapInEditor() 
+        {
             textureData.UpdateMeshHeights (terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
             textureData.ApplyToMaterial (terrainMaterial);
-            HeightMap heightMap = HeightMapGenerator.GenerateHeightMap (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
+            
+            HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(MeshSettings.numVertsPerLine, 
+                heightMapSettings, Vector2.zero);
 
-            MeshData mesh = MeshGenerator.GenerateTerrainMesh(heightMap.values, editorPreviewLOD);
+            MeshData mesh = MeshGenerator.GenerateTerrainMesh(heightMap.Values, editorPreviewLOD);
             DrawMesh(mesh);
-            PutPrefabsInMap test = FindObjectOfType<PutPrefabsInMap>();
+            
+            PutPrefabsInMap prefabGenerator = FindObjectOfType<PutPrefabsInMap>();
+            
             if (autoInstantiatePrefabs)
             {
                 foreach (Transform child in meshFilter.gameObject.transform) {
                     DestroyImmediate(child.gameObject);
                 }
-                test.GeneratePrefabs(meshFilter.mesh, Vector2.zero, meshFilter.gameObject.transform);
+                prefabGenerator.GeneratePrefabs(meshFilter.mesh, Vector2.zero, meshFilter.gameObject.transform);
             }
         }
 
@@ -73,7 +76,5 @@ namespace PCG
                 textureData.OnValuesUpdated += OnTextureValuesUpdated;
             }
         }
-        
-
     }
 }

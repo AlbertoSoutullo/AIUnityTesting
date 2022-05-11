@@ -1,17 +1,14 @@
-using PCG.Data;
-using UnityEditor;
 using UnityEngine;
 
 namespace PCG
 {
     public static class Noise
     {
-
         public enum NormalizeMode { Local, Global };
 
-        public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, NoiseSettings settings, Vector2 sampleCentre) {
-        
-            float[,] noiseMap = new float[mapWidth, mapHeight];
+        public static float[,] GenerateNoiseMap(int mapSize, NoiseSettings settings, Vector2 sampleCentre) 
+        {
+            float[,] noiseMap = new float[mapSize, mapSize];
             System.Random rng = new System.Random(settings.seed);
             float maxPossibleHeight = 0;
             float amplitude = 1;
@@ -24,17 +21,16 @@ namespace PCG
             Vector2[] octaveOffsets = NavigateThroughNoiseMap(settings.octaves, settings.offset, rng, ref amplitude, 
                 settings.persistance, ref maxPossibleHeight, sampleCentre);
 
-            noiseMap = FillNoiseMap(mapHeight, mapWidth, settings, octaveOffsets, noiseMap, ref maxNoiseHeight, 
+            noiseMap = FillNoiseMap(mapSize, settings, octaveOffsets, noiseMap, ref maxNoiseHeight, 
                 ref minNoiseHeight, ref amplitude, ref frequency, maxPossibleHeight);
 
-            noiseMap = NormalizeNoiseMap(noiseMap, mapHeight, mapWidth, minNoiseHeight, 
-                maxNoiseHeight, settings.normalizeMode);
+            noiseMap = NormalizeNoiseMap(noiseMap, mapSize, minNoiseHeight, maxNoiseHeight, settings.normalizeMode);
 
             return noiseMap;
         }
 
-        private static float CreateNoiseHeight(int x, int y, int octaves, float halfWidth, float halfHeight,
-            float scale, float persistance, float lacunarity, Vector2[] octaveOffsets, ref float amplitude, 
+        private static float CreateNoiseHeight(int x, int y, int octaves, float halfSize, float scale, 
+            float persistance, float lacunarity, Vector2[] octaveOffsets, ref float amplitude, 
             ref float frequency)
         {
             amplitude = 1;
@@ -42,8 +38,8 @@ namespace PCG
             float noiseHeight = 0;
             
             for (int i = 0; i < octaves; i++) {
-                float sampleX = (x-halfWidth + octaveOffsets[i].x) / scale * frequency ;
-                float sampleY = (y-halfHeight + octaveOffsets[i].y) / scale * frequency ;
+                float sampleX = (x-halfSize + octaveOffsets[i].x) / scale * frequency ;
+                float sampleY = (y-halfSize + octaveOffsets[i].y) / scale * frequency ;
                         
                 // Default PerlinNoise is [0,1], we do *2-1 to get in the range of [-1,1]
                 float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
@@ -68,18 +64,16 @@ namespace PCG
             return noiseHeight;
         }
 
-        private static float[,] FillNoiseMap(int mapHeight, int mapWidth, NoiseSettings settings, Vector2[] octaveOffsets, float[,] noiseMap, 
+        private static float[,] FillNoiseMap(int mapSize, NoiseSettings settings, Vector2[] octaveOffsets, float[,] noiseMap, 
             ref float maxNoiseHeight, ref float minNoiseHeight, ref float amplitude, ref float frequency, float maxPossibleNoiseHeight)
         {
-            float halfWidth = mapWidth / 2f;
-            float halfHeight = mapHeight / 2f;
-            
-            for (int y = 0; y < mapHeight; y++) {
-                for (int x = 0; x < mapWidth; x++)
+            float halfSize = mapSize / 2f;
+
+            for (int y = 0; y < mapSize; y++) {
+                for (int x = 0; x < mapSize; x++)
                 {
-                    float noiseHeight = CreateNoiseHeight(x, y, settings.octaves, halfWidth, halfHeight,
-                        settings.scale, settings.persistance, settings.lacunarity, octaveOffsets, ref amplitude, 
-                        ref frequency);
+                    float noiseHeight = CreateNoiseHeight(x, y, settings.octaves, halfSize, settings.scale, 
+                        settings.persistance, settings.lacunarity, octaveOffsets, ref amplitude, ref frequency);
 
                     noiseHeight = ClampNoiseHeight(noiseHeight, ref maxNoiseHeight, ref minNoiseHeight);
                     
@@ -95,13 +89,14 @@ namespace PCG
             return noiseMap; 
         }
 
-        private static float[,] NormalizeNoiseMap(float[,] noiseMap, int mapHeight, int mapWidth, 
-            float minLocalNoiseHeight, float maxLocalNoiseHeight, NormalizeMode normalizeMode)
+        private static float[,] NormalizeNoiseMap(float[,] noiseMap, int mapSize, float minLocalNoiseHeight, 
+            float maxLocalNoiseHeight, NormalizeMode normalizeMode)
         {
             if (normalizeMode == NormalizeMode.Local) {
-                for (int y = 0; y < mapHeight; y++) {
-                    for (int x = 0; x < mapWidth; x++) {
-                        noiseMap[x, y] = Mathf.InverseLerp (minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap [x, y]);
+                for (int y = 0; y < mapSize; y++) {
+                    for (int x = 0; x < mapSize; x++) {
+                        noiseMap[x, y] = Mathf.InverseLerp (minLocalNoiseHeight, maxLocalNoiseHeight, 
+                            noiseMap [x, y]);
                     }
                 }
             }

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba4a30f244d45d1bfc1d46bc4adef57, type: 3}
   m_Name: DefaultPrefabs
   m_EditorClassIdentifier: 
+  autoUpdate: 0
   seed: 1
   noiseImportance:
     serializedVersion: 2
@@ -38,7 +39,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   cabinPrefab:
-    Transform: {fileID: 662760774420115199, guid: 942d7e303174e3526bbde067c4926d86, type: 3}
+    transform: {fileID: 0}
     heightImportance:
       serializedVersion: 2
       m_Curve:

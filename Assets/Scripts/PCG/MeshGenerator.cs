@@ -1,5 +1,8 @@
-using PCG.Data;
+// Unity Imports
 using UnityEngine;
+
+//Project Imports
+using PCG.Data;
 
 namespace PCG
 {
@@ -20,24 +23,26 @@ namespace PCG
             
             int vertexIndex = 0;
 
-            for (int y = 0; y < height; y+=meshSimplificationIncrement) {
-                for (int x = 0; x < width; x+=meshSimplificationIncrement) {
+            for (int y = 0; y < height; y += meshSimplificationIncrement) {
+                for (int x = 0; x < width; x += meshSimplificationIncrement) {
 
-                    meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, heightMap[x, y], topLeftZ - y);
-                    meshData.uvs[vertexIndex] = new Vector2(x / (float)width, y / (float)height);
-
-                    // Ignoring right and bottom edge vertices
-                    if (x < width - 1 && y < height - 1) {
-                        meshData.AddTriangle (vertexIndex, vertexIndex + verticesPerLine + 1, 
+                    meshData.Vertices[vertexIndex] = new Vector3(topLeftX + x, heightMap[x, y], topLeftZ - y);
+                    meshData.Uvs[vertexIndex] = new Vector2(x / (float)width, y / (float)height);
+                    
+                    if (NotEdgePoints(x, y, width, height)) {
+                        meshData.AddTriangle(vertexIndex, vertexIndex + verticesPerLine + 1, 
                             vertexIndex + verticesPerLine);
-                        meshData.AddTriangle (vertexIndex + verticesPerLine + 1, vertexIndex, vertexIndex + 1);
+                        meshData.AddTriangle(vertexIndex + verticesPerLine + 1, vertexIndex, vertexIndex + 1);
                     }
-
                     vertexIndex++;
                 }
             }
-
             return meshData;
+        }
+
+        private static bool NotEdgePoints(int x, int y, int width, int height)
+        {
+            return (x < width - 1 && y < height - 1);
         }
     }
 }
