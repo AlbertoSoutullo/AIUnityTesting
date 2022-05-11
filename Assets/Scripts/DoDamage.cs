@@ -1,5 +1,8 @@
-using EnemyAI.Scripts;
+// Unity Imports
 using UnityEngine;
+
+// Project Imports
+using EnemyAI.Scripts;
 
 public class DoDamage : MonoBehaviour
 {
