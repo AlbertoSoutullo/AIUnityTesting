@@ -1,71 +1,75 @@
+// Unity Imports
 using System.Collections;
-using PCG;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Spawner : MonoBehaviour
+namespace Player.Scripts
 {
-    public LayerMask TerrainLayer;
-    public GameObject Enemy;
-    public GameObject hunter;
-    
-    public float maxRadious = 40;
-    public float minSpawnTime = 15;
-    public float maxSpawnTime = 30;
-    
-    private IEnumerator coroutine;
-    private void Start()
+    public class Spawner : MonoBehaviour
     {
-        StartCoroutine(spawnHunter());
-        coroutine = Spawn();
-        StartCoroutine(coroutine);
-    }
-
-    private IEnumerator spawnHunter()
-    {
-        float secondsToWait = 5;
-        yield return new WaitForSeconds(secondsToWait);
-        
-        float randomPositiony = 0;
-        float randomPositionx = Random.Range(transform.position.x, transform.position.x + maxRadious);
-        float randomPositionz = Random.Range(transform.position.z, transform.position.z + maxRadious);
-
-        RaycastHit hit;
-        if (Physics.Raycast(new Vector3(randomPositionx, 9999f, randomPositionz), Vector3.down,
-                out hit, Mathf.Infinity, TerrainLayer))
+        public LayerMask terrainLayer;
+        public GameObject enemy;
+        public GameObject hunter;
+    
+        public float maxRadius = 40;
+        public float minSpawnTime = 15;
+        public float maxSpawnTime = 30;
+    
+        private IEnumerator _coroutine;
+        private void Start()
         {
-            randomPositiony = hit.point.y;
+            StartCoroutine(SpawnHunter());
+            _coroutine = SpawnEnemies();
+            StartCoroutine(_coroutine);
         }
-            
-        randomPositiony += hunter.transform.position.y / 2;
-        Vector3 randomPosition = new Vector3(randomPositionx, randomPositiony, randomPositionz);
 
-        Instantiate(hunter, randomPosition, Quaternion.identity);
-    }
-
-    private IEnumerator Spawn()
-    {
-        while (true)
+        private IEnumerator SpawnHunter()
         {
-            float secondsToWait = Random.Range(minSpawnTime, maxSpawnTime);
+            float secondsToWait = 5;
             yield return new WaitForSeconds(secondsToWait);
-
+        
+            var position = transform.position;
             float randomPositiony = 0;
-            float randomPositionx = Random.Range(transform.position.x, transform.position.x + maxRadious);
-            float randomPositionz = Random.Range(transform.position.z, transform.position.z + maxRadious);
+            float randomPositionx = Random.Range(position.x, position.x + maxRadius);
+            float randomPositionz = Random.Range(position.z, position.z + maxRadius);
 
             RaycastHit hit;
             if (Physics.Raycast(new Vector3(randomPositionx, 9999f, randomPositionz), Vector3.down,
-                out hit, Mathf.Infinity, TerrainLayer))
+                out hit, Mathf.Infinity, terrainLayer))
             {
                 randomPositiony = hit.point.y;
             }
             
-            randomPositiony += Enemy.transform.position.y / 2;
+            randomPositiony += hunter.transform.position.y / 2;
             Vector3 randomPosition = new Vector3(randomPositionx, randomPositiony, randomPositionz);
 
-            Instantiate(Enemy, randomPosition, Quaternion.identity);
+            Instantiate(hunter, randomPosition, Quaternion.identity);
         }
 
+        private IEnumerator SpawnEnemies()
+        {
+            while (true)
+            {
+                float secondsToWait = Random.Range(minSpawnTime, maxSpawnTime);
+                yield return new WaitForSeconds(secondsToWait);
+
+                var transform1 = transform;
+                float randomPositiony = 0;
+                float randomPositionx = Random.Range(transform1.position.x, transform1.position.x + maxRadius);
+                float randomPositionz = Random.Range(transform.position.z, transform.position.z + maxRadius);
+
+                RaycastHit hit;
+                if (Physics.Raycast(new Vector3(randomPositionx, 9999f, randomPositionz), Vector3.down,
+                    out hit, Mathf.Infinity, terrainLayer))
+                {
+                    randomPositiony = hit.point.y;
+                }
+            
+                randomPositiony += enemy.transform.position.y / 2;
+                Vector3 randomPosition = new Vector3(randomPositionx, randomPositiony, randomPositionz);
+
+                Instantiate(enemy, randomPosition, Quaternion.identity);
+            }
+        }
     }
 }

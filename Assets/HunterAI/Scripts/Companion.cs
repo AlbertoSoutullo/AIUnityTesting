@@ -59,19 +59,6 @@ namespace HunterAI.Scripts
 		{
 			return _stateMachine;
 		}
-		
-		/* todo delete?
-		IEnumerator OnCompleteAttackAnimation()
-		{
-			yield return new WaitUntil(() => _animationController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
-			_animationController.SetBool(Shoot, false);
-		}
-
-		public bool IsAttackAnimationFinished()
-		{
-			return _animationController.GetCurrentAnimatorStateInfo(0).IsName("Shoot")
-			       && _animationController.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f;
-		}*/
 
 		public void Attack()
 		{

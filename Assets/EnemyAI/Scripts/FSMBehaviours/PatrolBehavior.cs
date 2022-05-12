@@ -1,8 +1,8 @@
-using System.Collections.Generic;
+// Unity Imports
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace EnemyAI.Scripts
+namespace EnemyAI.Scripts.FSMBehaviours
 {
     public class PatrolBehavior : StateMachineBehaviour
     {

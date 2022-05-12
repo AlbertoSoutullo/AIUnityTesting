@@ -1,4 +1,9 @@
+// Unity Imports
 using UnityEngine;
+
+// Project Imports
+using Player.Scripts;
+
 
 public class CameraMovement : MonoBehaviour
 {
@@ -22,7 +27,7 @@ public class CameraMovement : MonoBehaviour
     private void PrepareActionWhenTargetSpawn()
     {
         Debug.Log("Player still not instantiated");
-        Player.InstanceStarted += OnPlayerInstanceStarted;
+        PlayerScript.InstanceStarted += OnPlayerInstanceStarted;
         _backupGameObject = new GameObject();
         _targetTransform = _backupGameObject.transform;
     }
@@ -32,9 +37,9 @@ public class CameraMovement : MonoBehaviour
         _targetTransform = target.transform;
     }
 
-    private void OnPlayerInstanceStarted(Player instance)
+    private void OnPlayerInstanceStarted(PlayerScript instance)
     {
-        Player.InstanceStarted -= OnPlayerInstanceStarted;
+        PlayerScript.InstanceStarted -= OnPlayerInstanceStarted;
         target = instance.gameObject;
         _targetTransform = target.transform;
         Destroy(_backupGameObject);

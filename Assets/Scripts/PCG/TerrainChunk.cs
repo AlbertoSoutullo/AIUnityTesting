@@ -1,5 +1,8 @@
-﻿using PCG.Data;
+﻿// Unity Imports
 using UnityEngine;
+
+// Project Imports
+using PCG.Data;
 
 namespace PCG
 {

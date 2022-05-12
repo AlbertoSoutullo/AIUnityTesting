@@ -1,14 +1,18 @@
-﻿using System.Collections;
+﻿// Unity Imports
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+
+// Project Imports
+using Player.Scripts;
 
 namespace PCG
 {
     public class AreaFloorBaked: MonoBehaviour
     {
         [SerializeField] private NavMeshSurface surface;
-        [SerializeField] private Player player;
+        [SerializeField] private PlayerScript player;
         [SerializeField] private float updateRate = 2f;
         [SerializeField] private float movementThreshold = 3;
         [SerializeField] private Vector3 navMeshSize = new Vector3(20,20,20);

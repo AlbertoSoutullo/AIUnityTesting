@@ -1,6 +1,7 @@
+// Unity Imports
 using UnityEngine;
 
-namespace EnemyAI.Scripts
+namespace EnemyAI.Scripts.FSMBehaviours
 {
     public class IdleBehavior : StateMachineBehaviour
     {

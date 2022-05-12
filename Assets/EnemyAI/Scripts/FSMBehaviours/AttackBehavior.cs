@@ -1,6 +1,7 @@
+// Unity Imports
 using UnityEngine;
 
-namespace EnemyAI.Scripts
+namespace EnemyAI.Scripts.FSMBehaviours
 {
     public class AttackBehavior : StateMachineBehaviour
     {
@@ -49,6 +50,5 @@ namespace EnemyAI.Scripts
             if (distanceToPlayer > 3)
                 animator.SetBool(IsAttacking, false);
         }
-
     }
 }

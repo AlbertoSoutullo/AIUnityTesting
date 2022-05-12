@@ -1,5 +1,9 @@
+// Unity Imports
 using UnityEngine;
-using UnityEngine.AI;
+
+// Project Imports
+using Player.Scripts;
+
 
 namespace EnemyAI.Scripts
 {
@@ -69,7 +73,7 @@ namespace EnemyAI.Scripts
             foreach (Collider c in cols)
             {
                 if (c.gameObject.name == "child")
-                    c.gameObject.GetComponent<Player>().TakeDamage(attackDamage);
+                    c.gameObject.GetComponent<PlayerScript>().TakeDamage(attackDamage);
             }
         }
 
