@@ -39,7 +39,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   cabinPrefab:
-    transform: {fileID: 0}
+    transform: {fileID: 4017359017749981955, guid: fb539cc724255d2498155cd1c8c64d87, type: 3}
     heightImportance:
       serializedVersion: 2
       m_Curve:

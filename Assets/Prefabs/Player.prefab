@@ -1118,12 +1118,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f466ac02d0a68de43a9d76884e63630b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TerrainLayer:
+  terrainLayer:
     serializedVersion: 2
     m_Bits: 8
-  Enemy: {fileID: 1932402746202957328, guid: 0f713e0aece33dc44afa38bda23c498d, type: 3}
+  enemy: {fileID: 1932402746202957328, guid: 0f713e0aece33dc44afa38bda23c498d, type: 3}
   hunter: {fileID: 1740264005145846946, guid: b80376040ee976d4e9eb32972c61e744, type: 3}
-  maxRadious: 20
+  maxRadius: 40
   minSpawnTime: 2
   maxSpawnTime: 5
 --- !u!136 &800103297523605351

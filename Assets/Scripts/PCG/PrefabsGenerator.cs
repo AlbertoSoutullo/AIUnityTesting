@@ -118,7 +118,7 @@ namespace PCG
         {
             List<Vector3> randomlySampledPositions = SampleRandomPositions(positions, random);
             
-            int maxWeightIndex = -1;
+            int maxWeightIndex = 0;
             float totalWeight = -1;
             float[] weights = AssignWeightToPosition(randomlySampledPositions, heightImportance, heightMultiplier,
                 ref maxWeightIndex, ref totalWeight);
