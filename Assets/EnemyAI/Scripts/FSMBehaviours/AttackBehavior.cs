@@ -34,14 +34,14 @@ namespace EnemyAI.Scripts.FSMBehaviours
             animator.GetComponent<Rigidbody>().constraints = ~RigidbodyConstraints.FreezePosition;
         }
 
-        private void FindPlayer()
-        {
-            _player = GameObject.FindGameObjectWithTag("Player").transform;
-        }
-
         private void LockPositionToAttack(Animator animator)
         {
             animator.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePosition;
+        }
+        
+        private void FindPlayer()
+        {
+            _player = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
         private void AttackToPlayer(Animator animator, Transform transform)

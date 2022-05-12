@@ -1,7 +1,10 @@
 // Unity Imports
 using System.Collections;
+using System.Numerics;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Player.Scripts
 {
@@ -10,7 +13,8 @@ namespace Player.Scripts
         public LayerMask terrainLayer;
         public GameObject enemy;
         public GameObject hunter;
-    
+
+        public float minRadius = 15;
         public float maxRadius = 40;
         public float minSpawnTime = 15;
         public float maxSpawnTime = 30;
@@ -27,21 +31,11 @@ namespace Player.Scripts
         {
             float secondsToWait = 5;
             yield return new WaitForSeconds(secondsToWait);
-        
-            var position = transform.position;
-            float randomPositiony = 0;
-            float randomPositionx = Random.Range(position.x, position.x + maxRadius);
-            float randomPositionz = Random.Range(position.z, position.z + maxRadius);
 
-            RaycastHit hit;
-            if (Physics.Raycast(new Vector3(randomPositionx, 9999f, randomPositionz), Vector3.down,
-                out hit, Mathf.Infinity, terrainLayer))
-            {
-                randomPositiony = hit.point.y;
-            }
-            
-            randomPositiony += hunter.transform.position.y / 2;
-            Vector3 randomPosition = new Vector3(randomPositionx, randomPositiony, randomPositionz);
+            Vector3 randomPosition = GetSpawnPositionWithingRing();
+
+            randomPosition.y = CalculateHeightValue(randomPosition.x, randomPosition.z);
+            randomPosition.y += hunter.transform.position.y / 2;
 
             Instantiate(hunter, randomPosition, Quaternion.identity);
         }
@@ -53,23 +47,39 @@ namespace Player.Scripts
                 float secondsToWait = Random.Range(minSpawnTime, maxSpawnTime);
                 yield return new WaitForSeconds(secondsToWait);
 
-                var transform1 = transform;
-                float randomPositiony = 0;
-                float randomPositionx = Random.Range(transform1.position.x, transform1.position.x + maxRadius);
-                float randomPositionz = Random.Range(transform.position.z, transform.position.z + maxRadius);
+                Vector3 randomPosition = GetSpawnPositionWithingRing();
 
-                RaycastHit hit;
-                if (Physics.Raycast(new Vector3(randomPositionx, 9999f, randomPositionz), Vector3.down,
-                    out hit, Mathf.Infinity, terrainLayer))
-                {
-                    randomPositiony = hit.point.y;
-                }
+                randomPosition.y = CalculateHeightValue(randomPosition.x, randomPosition.z);
             
-                randomPositiony += enemy.transform.position.y / 2;
-                Vector3 randomPosition = new Vector3(randomPositionx, randomPositiony, randomPositionz);
+                randomPosition.y += enemy.transform.position.y / 2;
 
                 Instantiate(enemy, randomPosition, Quaternion.identity);
             }
+        }
+
+        private Vector3 GetSpawnPositionWithingRing()
+        {
+            float radius = Mathf.Sqrt(Random.Range(minRadius*minRadius, maxRadius*maxRadius));
+            float angle = Random.Range(-Mathf.PI, Mathf.PI);
+  
+            Vector3 centralSpawnPosition = transform.position;
+            centralSpawnPosition += new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle)) * radius;
+
+            return centralSpawnPosition;
+        }
+
+        private float CalculateHeightValue(float randomPositionx, float randomPositionz)
+        {
+            float randomPositiony = 0;
+            
+            RaycastHit hit;
+            if (Physics.Raycast(new Vector3(randomPositionx, 9999f, randomPositionz), Vector3.down,
+                out hit, Mathf.Infinity, terrainLayer))
+            {
+                randomPositiony = hit.point.y;
+            }
+
+            return randomPositiony;
         }
     }
 }
