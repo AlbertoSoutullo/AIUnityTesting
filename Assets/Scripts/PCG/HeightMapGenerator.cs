@@ -47,8 +47,6 @@ namespace PCG
         }
     }
     
-    
-    
     public readonly struct HeightMap
     {
         public readonly float[,] Values;

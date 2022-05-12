@@ -62,15 +62,20 @@ namespace PCG
                 _viewerPositionOld = _viewerPosition;
                 UpdateVisibleChunks();
             }
-        }   
+        }
 
-        void UpdateVisibleChunks()
+        private void SetPreviousChunksInvisible()
         {
             foreach (var terrChunkVisible in _terrainChunksVisibleLastUpdate)
             {
                 terrChunkVisible.GetComponent<TerrainChunk>().SetVisible(false);
             }
             _terrainChunksVisibleLastUpdate.Clear();
+        }
+
+        private void UpdateVisibleChunks()
+        {
+            SetPreviousChunksInvisible();
 
             int currentChunkCoordX = Mathf.RoundToInt(_viewerPosition.x / _chunkSize);
             int currentChunkCoordY = Mathf.RoundToInt(_viewerPosition.y / _chunkSize);
@@ -79,45 +84,41 @@ namespace PCG
             {
                 for (int xOffset = -_chunkVisibleInViewDistance; xOffset <= _chunkVisibleInViewDistance; xOffset++)
                 {
-                    Vector2 viewedChunkCoord = new Vector2(currentChunkCoordX + xOffset,
+                    Vector2 viewedChunkCoord = new Vector2(currentChunkCoordX + xOffset, 
                         currentChunkCoordY + yOffset);
 
                     if (_terrainChunkDicctionary.ContainsKey(viewedChunkCoord))
-                    {
                         _terrainChunkDicctionary[viewedChunkCoord].GetComponent<TerrainChunk>().UpdateTerrainChunk();
-                    }
                     else
-                    {
-                        GameObject newChunk = Instantiate(terrainChunk, transform);
-                        newChunk.GetComponent<TerrainChunk>().PrepareChunk(viewedChunkCoord, heightMapSettings, _chunkSize, detailLevels, 
-                            transform, mapMaterial, viewer);
-                        _terrainChunkDicctionary.Add(viewedChunkCoord, newChunk);
-                        newChunk.GetComponent<TerrainChunk>().ONVisibilityChanged += OnTerrainChunkVisibilityChange;
-                        newChunk.GetComponent<TerrainChunk>().Load();
-                    }
+                        CreateNewChunk(viewedChunkCoord);
                 }
             }
         }
 
+        private void CreateNewChunk(Vector2 viewedChunkCoord)
+        {
+            GameObject newChunk = Instantiate(terrainChunk, transform);
+            newChunk.GetComponent<TerrainChunk>().PrepareChunk(viewedChunkCoord, heightMapSettings, _chunkSize, detailLevels, 
+                transform, mapMaterial, viewer);
+            _terrainChunkDicctionary.Add(viewedChunkCoord, newChunk);
+            newChunk.GetComponent<TerrainChunk>().ONVisibilityChanged += OnTerrainChunkVisibilityChange;
+            newChunk.GetComponent<TerrainChunk>().Load();
+        }
+        
         private IEnumerator UpdatePlayerPosition()
         {
-            yield return new WaitForSecondsRealtime(1.5f);
-            
-            // Bit shift the index of the layer (8) to get a bit mask
-            int layerMask = 1 << 3;
-            
+            yield return new WaitForSecondsRealtime(2f);
+
             float positionYPlayer = 0;
-            float positionYHunter = 0;
             RaycastHit hit;
             
             if (Physics.Raycast(new Vector3(0, 9999f, 0), Vector3.down,
                 out hit, Mathf.Infinity, terrainLayer))
             {
-                Debug.Log("HIT");
                 positionYPlayer = hit.point.y;
             }
 
-            positionYPlayer += 1.5f / 2; // model scale is not correct, so distance is manually added
+            positionYPlayer += 1.5f / 2;
             
             Vector3 positionPlayer = new Vector3(0, positionYPlayer, 0);
 

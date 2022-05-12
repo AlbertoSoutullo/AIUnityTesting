@@ -31,38 +31,66 @@ namespace PCG
         private float _maxViewDistance;
         private Vector2 _position;
         
-        
         public void PrepareChunk(Vector2 coord, HeightMapSettings settings, int size, LODInfo[] detailLevels, 
             Transform parent, Material material, Transform viewer)
         {
-            _meshRenderer = GetComponent<MeshRenderer>();
-            meshFilter = GetComponent<MeshFilter>();
-            
-            heightMapSettings = settings;
-            chunkSize = size;
-            _detailLevels = detailLevels;
-            chunkViewer = viewer;
-            
-            _position = coord * (chunkSize-1);
-            _name = $"{_position.x}:{_position.y}";
-            _bounds = new Bounds(_position, Vector2.one * chunkSize);
+            SetVariables(settings, size, detailLevels, viewer, coord, material, parent);
 
-            Vector3 positionV3 = new Vector3(_position.x, 0, _position.y);
-            
-            int layer = LayerMask.NameToLayer("Ground");
-            gameObject.layer = layer;
-            
-            _meshRenderer.material = material;
-            transform.position = positionV3;
-            transform.parent = parent;
             SetVisible(false);
 
+            PrepareLODs(detailLevels);
+        }
+
+        private void PrepareLODs(LODInfo[] detailLevels)
+        {
             _lodMeshes = new LODMesh[detailLevels.Length];
             for (int i = 0; i < _lodMeshes.Length; i++)
             {
                 _lodMeshes[i] = new LODMesh(detailLevels[i].lod, UpdateTerrainChunk);
             }
+        }
 
+        private void SetComponents()
+        {
+            _meshRenderer = GetComponent<MeshRenderer>();
+            meshFilter = GetComponent<MeshFilter>();
+        }
+
+        private void SetMeshProperties(Material material, HeightMapSettings settings, int size, LODInfo[] detailLevels,
+            Transform viewer)
+        {
+            _meshRenderer.material = material;
+            heightMapSettings = settings;
+            chunkSize = size;
+            _detailLevels = detailLevels;
+            chunkViewer = viewer;
+        }
+
+        private void SetSpaceVariables(Vector2 coord, Transform parent)
+        {
+            _position = coord * (chunkSize-1);
+            _bounds = new Bounds(_position, Vector2.one * chunkSize);
+            
+            Vector3 positionV3 = new Vector3(_position.x, 0, _position.y);
+            transform.position = positionV3;
+            transform.parent = parent;
+        }
+
+        private void SetGameObjectInfo()
+        {
+            _name = $"{_position.x}:{_position.y}";
+            int layer = LayerMask.NameToLayer("Ground");
+            gameObject.layer = layer;
+        }
+
+        private void SetVariables(HeightMapSettings settings, int size, LODInfo[] detailLevels, Transform viewer,
+            Vector2 coord, Material material, Transform parent)
+        {
+            SetComponents();
+            SetMeshProperties(material, settings, size, detailLevels, viewer);
+            SetSpaceVariables(coord, parent);
+            SetGameObjectInfo();
+            
             _maxViewDistance = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
         }
 

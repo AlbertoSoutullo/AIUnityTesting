@@ -16,10 +16,8 @@ namespace PCG
             Vector3[] oldPositions, PrefabsData prefabsData) 
         {
             System.Random random = new System.Random(prefabsData.seed);
-        
             AnimationCurve noiseImportance = prefabsData.noiseImportance;
             PrefabsData.Prefab[] prefabs = prefabsData.prefabs;
-            
             List<float[,]> noiseMaps = new List<float[,]>();
             
             Vector3[] positions = new Vector3[oldPositions.Length + 1];
