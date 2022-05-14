@@ -68,9 +68,9 @@ namespace EnemyAI.Scripts
             return cols;
         }
 
-        private void ApplyDamage(Collider[] cols)
+        private void ApplyDamage(Collider[] colliders)
         {
-            foreach (Collider c in cols)
+            foreach (Collider c in colliders)
             {
                 if (c.gameObject.name == "child")
                     c.gameObject.GetComponent<PlayerScript>().TakeDamage(attackDamage);

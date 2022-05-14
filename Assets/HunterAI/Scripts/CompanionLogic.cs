@@ -25,17 +25,11 @@ namespace HunterAI.Scripts
                 .Where(enemy => Vector3.Distance(transform.position, enemy.transform.position) < visionRangeDistance
                                 && Vector3.Distance(_playerTransform.position, enemy.transform.position) < (weaponRangeDistance + playerMaxDistanceToRun));
         }
-        
-        public IEnumerable<GameObject> ExistingArrows()
+
+        private IEnumerable<GameObject> ExistingArrows()
         {
             return GameObject.FindGameObjectsWithTag("SpawnedArrow")
                 .Where(arrow => Vector3.Distance(transform.position, arrow.transform.position) < visionRangeDistance);
-        }
-        
-        public IEnumerable<GameObject> EnemiesInWeaponRange()
-        {
-            return GameObject.FindGameObjectsWithTag("Enemy")
-                .Where(enemy => Vector3.Distance(transform.position, enemy.transform.position) < weaponRangeDistance);
         }
         
         public float DistanceWithPlayer()
@@ -59,12 +53,6 @@ namespace HunterAI.Scripts
                 }
             }
             return targetEnemy;
-        }
-        
-        public IEnumerable<GameObject> SeeEnemies()
-        {
-            return GameObject.FindGameObjectsWithTag("Enemy").Where(enemy => 
-                Vector3.Distance(transform.position, enemy.transform.position) < visionRangeDistance);
         }
         
         public GameObject GetClosestArrow()

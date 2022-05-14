@@ -83,7 +83,7 @@ namespace PCG
             return (heightProbability, noiseProbability);
         }
 
-        private static void GeneratePrefabNoiseMap(PrefabsData.Prefab[] prefabs, PrefabsData prefabsData,int mapSize, 
+        private static void GeneratePrefabNoiseMap(PrefabsData.Prefab[] prefabs, PrefabsData prefabsData, int mapSize, 
             List<Transform>[] prefabsTransforms, String[] transformsNames, List<float[,]> noiseMaps)
         {
             for (int i = 0; i < prefabs.Length; ++i)
@@ -100,12 +100,10 @@ namespace PCG
             PrefabsData prefabsData, String[] transformsNames, Vector3[] positions, float heightMultiplier,
             Vector3[] oldPositions, System.Random random)
         {
-            // Add cabin objects
             prefabsTransforms[prefabs.Length] = new List<Transform>();
             prefabsTransforms[prefabs.Length].Add(prefabsData.cabinPrefab.transform);
             transformsNames[prefabs.Length] = "cabin";
-        
-            // Determine cabin position
+            
             Vector3 cabinPosition = DetermineCabinPosition(positions, prefabsData.cabinPrefab.heightImportance, 
                 heightMultiplier, random, prefabsData.seed);
             positions[oldPositions.Length] = cabinPosition;

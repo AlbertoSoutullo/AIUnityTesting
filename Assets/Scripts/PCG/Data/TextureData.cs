@@ -7,10 +7,10 @@ namespace PCG.Data
     [CreateAssetMenu()]
     public class TextureData : UpdatableData
     {
+        public Layer[] layers;
+        
         private const int TextureSize = 512;
         private const TextureFormat TextureFormat = UnityEngine.TextureFormat.RGB565;
-    
-        public Layer[] layers;
 
         private float _savedMinHeight;
         private float _savedMaxHeight;

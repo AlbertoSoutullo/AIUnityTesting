@@ -17,8 +17,8 @@ namespace PCG
         private HeightMap _heightMap;
         public bool heightMapReceived;
 
-        private MeshRenderer _meshRenderer;
         public MeshFilter meshFilter;
+        private MeshRenderer _meshRenderer;
         private MeshCollider _meshCollider;
         private LODInfo[] _detailLevels;
         private LODMesh[] _lodMeshes;

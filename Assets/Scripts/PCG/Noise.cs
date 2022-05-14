@@ -106,7 +106,8 @@ namespace PCG
         }
 
         private static Vector2[] NavigateThroughNoiseMap(int octaves, Vector2 offset, System.Random rng, 
-            ref float amplitude, float persistance, ref float maxPossibleHeight, Vector2 sampleCentre){
+            ref float amplitude, float persistance, ref float maxPossibleHeight, Vector2 sampleCentre)
+        {
             Vector2[] octaveOffsets = new Vector2[octaves];
             
             for (int i = 0; i < octaves; i++) {

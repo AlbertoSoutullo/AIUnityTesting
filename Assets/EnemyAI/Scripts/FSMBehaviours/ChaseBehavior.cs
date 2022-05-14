@@ -23,9 +23,8 @@ namespace EnemyAI.Scripts.FSMBehaviours
     
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            Vector3 playerPosition = _player.position;
-            ChasePlayer(playerPosition);
-            AttackIfCloseEnough(animator, playerPosition);
+            ChasePlayer();
+            AttackIfCloseEnough(animator);
         }
     
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -45,14 +44,14 @@ namespace EnemyAI.Scripts.FSMBehaviours
             _player = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
-        private void ChasePlayer(Vector3 playerPosition)
+        private void ChasePlayer()
         {
-            _agent.SetDestination(playerPosition);
+            _agent.SetDestination(_player.transform.position);
         }
 
-        private void AttackIfCloseEnough(Animator animator, Vector3 playerPosition)
+        private void AttackIfCloseEnough(Animator animator)
         {
-            float distanceToPlayer = Vector3.Distance(animator.transform.position, playerPosition);
+            float distanceToPlayer = Vector3.Distance(animator.transform.position, _player.transform.position);
             if (distanceToPlayer < attackRange)
                 animator.SetBool(IsAttacking, true);
         }

@@ -11,11 +11,6 @@ namespace PCG
 {
     public class TerrainGenerator : MonoBehaviour
     {
-        private const float ViewerMoveThresholdForChunkUpdate = 25f;
-
-        private const float SqrViewerMoveThresholdForChunkUpdate = ViewerMoveThresholdForChunkUpdate *
-                                                                ViewerMoveThresholdForChunkUpdate;
-
         public HeightMapSettings heightMapSettings;
         public TextureData textureSettings;
         public GameObject terrainChunk;
@@ -31,6 +26,11 @@ namespace PCG
         private Vector2 _viewerPositionOld;
         private int _chunkSize;
         private int _chunkVisibleInViewDistance;
+
+        private const float ViewerMoveThresholdForChunkUpdate = 25f;
+
+        private const float SqrViewerMoveThresholdForChunkUpdate = ViewerMoveThresholdForChunkUpdate *
+                                                                   ViewerMoveThresholdForChunkUpdate;
 
         private readonly Dictionary<Vector2, GameObject> _terrainChunkDicctionary = new Dictionary<Vector2, GameObject>();
         private readonly List<GameObject> _terrainChunksVisibleLastUpdate = new List<GameObject>();

@@ -8,11 +8,13 @@ namespace EnemyAI.Scripts.FSMBehaviours
     {
         private NavMeshAgent _agent;
         private Transform _player;
-
-        private const float ChaseRange = 5;
+        
         private bool _patrolling = false;
-        private static readonly int IsChasing = Animator.StringToHash("IsChasing");
+        
         private const float Radius = 10f;
+        private const float ChaseRange = 5;
+        
+        private static readonly int IsChasing = Animator.StringToHash("IsChasing");
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
@@ -27,11 +29,6 @@ namespace EnemyAI.Scripts.FSMBehaviours
         {
             CheckIfPlayerIsInChaseRange(animator);
             NewWalkPoint(animator);
-        }
-
-        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-        {
-            
         }
 
         private void RandomWalk(Animator animator)

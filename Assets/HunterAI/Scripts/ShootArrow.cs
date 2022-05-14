@@ -9,15 +9,15 @@ namespace HunterAI.Scripts
         public Transform bowPosition;
         public float launchVelocity = 700f;
 
-        private Companion _fsm;
+        private Companion _companion;
     
         public void Shoot()
         {
             GameObject arrow = Instantiate(projectile, bowPosition.position,  
                 transform.rotation);
         
-            _fsm = GetComponent<Companion>();
-            Vector3 target = _fsm.GetCurrentTarget().transform.position - transform.position;
+            _companion = GetComponent<Companion>();
+            Vector3 target = _companion.GetCurrentTarget().transform.position - transform.position;
         
             arrow.GetComponent<Rigidbody>().AddForce(target * launchVelocity);
             gameObject.transform.LookAt(target);

@@ -8,12 +8,11 @@ namespace HunterAI.Scripts.FSMStates
 {
     public class PointState : FsmState<Companion>
     {
-        private CompanionMovement _movement;
         private CompanionLogic _logic;
+        private GameObject _arrow;
         
         public static PointState instance { get; } = new PointState();
 
-        private GameObject _arrow;
         static PointState() {}
 
         public override void Enter(Companion companion)
