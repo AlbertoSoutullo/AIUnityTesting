@@ -1,21 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// Unity Imports
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
+using System.Collections.Generic;
+
+// Project Imports
+using Player.Scripts;
 
 namespace PCG
 {
     public class AreaFloorBaked: MonoBehaviour
     {
-        [SerializeField] private NavMeshSurface _surface;
-        [SerializeField] private Player _player;
-        [SerializeField] private float _updateRate = 0.1f;
-        [SerializeField] private float _movementThreshold = 3;
-        [SerializeField] private Vector3 NavMeshSize = new Vector3(20,20,20);
+        [SerializeField] public NavMeshSurface surface;
+        [SerializeField] public PlayerScript player;
+        [SerializeField] public float updateRate = 2f;
+        [SerializeField] public float movementThreshold = 3;
+        [SerializeField] public Vector3 navMeshSize = new Vector3(20,20,20);
 
-        private Vector3 WorldAnchor;
+        private Vector3 _worldAnchor;
         private NavMeshData _navMeshData;
-        private List<NavMeshBuildSource> _sources = new List<NavMeshBuildSource>();
+        private readonly List<NavMeshBuildSource> _sources = new List<NavMeshBuildSource>();
 
         private void Start()
         {
@@ -27,74 +31,73 @@ namespace PCG
 
         private IEnumerator CheckPlayerMovement()
         {
-            WaitForSeconds wait = new WaitForSeconds(_updateRate);
+            WaitForSeconds wait = new WaitForSeconds(updateRate);
 
             while (true)
             {
-                if (Vector3.Distance(WorldAnchor, _player.transform.position) > _movementThreshold)
+                if (NeedToUpdateNavMeshByDistance())
                 {
                     BuildNavMesh(true);
-                    WorldAnchor = _player.transform.position;
+                    _worldAnchor = player.transform.position;
                 }
-
                 yield return wait;
             }
         }
         
-        private void BuildNavMesh(bool Async)
+        private void BuildNavMesh(bool async)
         {
-            Bounds navMeshBounds = new Bounds(_player.transform.position, NavMeshSize);
+            Bounds navMeshBounds = new Bounds(player.transform.position, navMeshSize);
 
             List<NavMeshBuildMarkup> markups = new List<NavMeshBuildMarkup>();
-
             List<NavMeshModifier> modifiers;
 
-            if (_surface.collectObjects == CollectObjects.Children)
-            {
-                //modifiers = new List<NavMeshModifier>(_surface.GetComponentInChildren<NavMeshModifier>());
+            if (surface.collectObjects == CollectObjects.Children)
                 modifiers = new List<NavMeshModifier>();
-            }
             else
-            {
                 modifiers = NavMeshModifier.activeModifiers;
-            }
 
-            for (int i = 0; i < modifiers.Count; i++)
+            AddMarkupsToModifiers(modifiers, markups);
+            CollectSources(markups, navMeshBounds);
+
+            _sources.RemoveAll(sources => sources.component != null &&
+                                           sources.component.GetComponent<NavMeshAgent>() != null);
+            
+            if (async)
+                NavMeshBuilder.UpdateNavMeshDataAsync(_navMeshData, surface.GetBuildSettings(), _sources,
+                    new Bounds(player.transform.position, navMeshSize));
+        }
+
+        private void CollectSources(List<NavMeshBuildMarkup> markups, Bounds navMeshBounds)
+        {
+            if (surface.collectObjects == CollectObjects.Children)
+                NavMeshBuilder.CollectSources(surface.transform, surface.layerMask, surface.useGeometry,
+                    surface.defaultArea, markups, _sources);
+            else
+                NavMeshBuilder.CollectSources(navMeshBounds, surface.layerMask, surface.useGeometry,
+                    surface.defaultArea, markups, _sources);
+        }
+
+        private void AddMarkupsToModifiers(List<NavMeshModifier> modifiers, List<NavMeshBuildMarkup> markups)
+        {
+            foreach (var modifier in modifiers)
             {
-                if (((_surface.layerMask & (1 << modifiers[i].gameObject.layer)) == 1)
-                    && modifiers[i].AffectsAgentType(_surface.agentTypeID))
+                if (((surface.layerMask & (1 << modifier.gameObject.layer)) == 1)
+                    && modifier.AffectsAgentType(surface.agentTypeID))
                 {
                     markups.Add(new NavMeshBuildMarkup()
                     {
-                        root = modifiers[i].transform,
-                        overrideArea = modifiers[i].overrideArea,
-                        area = modifiers[i].area,
-                        ignoreFromBuild = modifiers[i].ignoreFromBuild
+                        root = modifier.transform,
+                        overrideArea = modifier.overrideArea,
+                        area = modifier.area,
+                        ignoreFromBuild = modifier.ignoreFromBuild
                     });
-
                 }
             }
+        }
 
-            if (_surface.collectObjects == CollectObjects.Children)
-            {
-                NavMeshBuilder.CollectSources(_surface.transform, _surface.layerMask, _surface.useGeometry,
-                    _surface.defaultArea, markups, _sources);
-                
-            }
-            else
-            {
-                NavMeshBuilder.CollectSources(navMeshBounds, _surface.layerMask, _surface.useGeometry,
-                    _surface.defaultArea, markups, _sources);
-            }
-
-            _sources.RemoveAll(_sources => _sources.component != null &&
-                                           _sources.component.GetComponent<NavMeshAgent>() != null);
-
-            if (Async)
-            {
-                NavMeshBuilder.UpdateNavMeshDataAsync(_navMeshData, _surface.GetBuildSettings(), _sources,
-                    new Bounds(_player.transform.position, NavMeshSize));
-            }
+        private bool NeedToUpdateNavMeshByDistance()
+        {
+            return (Vector3.Distance(_worldAnchor, player.transform.position) > movementThreshold);
         }
     }
 }

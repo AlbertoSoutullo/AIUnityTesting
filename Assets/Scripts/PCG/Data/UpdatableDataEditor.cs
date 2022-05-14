@@ -1,9 +1,9 @@
-﻿namespace PCG.Data
-{
-    using UnityEngine;
-    using System.Collections;
-    using UnityEditor;
+﻿// Unity Imports
+using UnityEngine;
+using UnityEditor;
 
+namespace PCG.Data
+{
     [CustomEditor (typeof(UpdatableData), true)]
     public class UpdatableDataEditor : Editor {
 

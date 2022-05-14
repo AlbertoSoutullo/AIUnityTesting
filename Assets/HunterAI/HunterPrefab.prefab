@@ -577,6 +577,9 @@ GameObject:
   - component: {fileID: 4154524551371191503}
   - component: {fileID: 7652446724829479716}
   - component: {fileID: 3737348110220356732}
+  - component: {fileID: 3898940636145431088}
+  - component: {fileID: 1358071130956486171}
+  - component: {fileID: -2593836941660927547}
   - component: {fileID: 2807858161477000540}
   - component: {fileID: 79661173569181787}
   m_Layer: 6
@@ -686,14 +689,49 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82297e2ef4e7b5944a81ca976e9e576d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMaxDistanceToRun: 10
-  playerMaxDistanceToWalk: 5
-  weaponRangeDistance: 8
   arrows: 1
-  visionRangeDistance: 25
-  weaponIsCharged: 1
+  playerMaxDistanceToWalk: 5
   movementRefreshTime: 2
+--- !u!114 &3898940636145431088
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740264005145846946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4368bf4e06f479690b5a96e3e6ab570, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1358071130956486171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740264005145846946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83f6493d00df4934872bbb34e3511969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponRangeDistance: 8
+  visionRangeDistance: 25
   radius: 5
+  playerMaxDistanceToRun: 10
+--- !u!114 &-2593836941660927547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740264005145846946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fba26c206c81483fbca7536e61f4b76b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2807858161477000540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -707,7 +745,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 4499067868583098228, guid: bc35e0494d044e44290a44f16611d658, type: 3}
-  bow_position: {fileID: 6775248582683707979}
+  bowPosition: {fileID: 6775248582683707979}
   launchVelocity: 700
 --- !u!114 &79661173569181787
 MonoBehaviour:

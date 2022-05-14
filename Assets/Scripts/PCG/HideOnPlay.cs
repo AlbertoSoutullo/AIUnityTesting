@@ -1,13 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿// Unity Imports
+using UnityEngine;
 
 namespace PCG
 {
     public class HideOnPlay : MonoBehaviour {
         
         void Start () {
-            gameObject.SetActive (false);
+            gameObject.SetActive(false);
         }
-
     }
 }

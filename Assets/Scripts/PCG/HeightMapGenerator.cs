@@ -1,30 +1,39 @@
-﻿using PCG.Data;
+﻿// Unity Imports
 using UnityEngine;
+
+// Project Imports
+using PCG.Data;
 
 namespace PCG
 {
     public static class HeightMapGenerator
     {
         private static float[,] _falloffMap;
-        public static HeightMap GenerateHeightMap(int width, int height, HeightMapSettings settings, 
+        
+        public static HeightMap GenerateHeightMap(int mapSize, HeightMapSettings settings, 
             Vector2 sampleCenter)
         {
-            float[,] values = Noise.GenerateNoiseMap(width, height, settings.noiseSettings, sampleCenter);
-            AnimationCurve heightCurve_threadsafe = new AnimationCurve(settings.heightCurve.keys);
+            float[,] values = Noise.GenerateNoiseMap(mapSize, settings.noiseSettings, sampleCenter);
+            AnimationCurve heightCurveThreadsafe = new AnimationCurve(settings.heightCurve.keys);
 
             float minValue = float.MaxValue;
             float maxValue = float.MinValue;
             
-            if (settings.useFalloff) {
-                if (_falloffMap == null) {
-                    _falloffMap = FallOffGenerator.GenerateFallOffMap(width);
-                }
-            }
-            
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) 
+            if (settings.useFalloff)
+                _falloffMap ??= FallOffGenerator.GenerateFallOffMap(mapSize);
+
+            EvaluateWithHeightMap(heightCurveThreadsafe, mapSize, values, ref minValue, ref maxValue, settings);
+
+            return new HeightMap(values);
+        }
+
+        private static void EvaluateWithHeightMap(AnimationCurve heightCurveThreadsafe, int mapSize, float[,] values, 
+            ref float minValue, ref float maxValue, HeightMapSettings settings)
+        {
+            for (int i = 0; i < mapSize; i++) {
+                for (int j = 0; j < mapSize; j++) 
                 {
-                    values[i, j] *= heightCurve_threadsafe.Evaluate(values[i, j] - (settings.useFalloff ? 
+                    values[i, j] *= heightCurveThreadsafe.Evaluate(values[i, j] - (settings.useFalloff ? 
                         _falloffMap[i, j] : 0)) * settings.heightMultiplier;
 
                     if (values[i, j] > maxValue){
@@ -35,22 +44,16 @@ namespace PCG
                     }
                 }
             }
-
-            return new HeightMap(values, minValue, maxValue);
         }
     }
     
-    public struct HeightMap
+    public readonly struct HeightMap
     {
-        public readonly float[,] values;
-        public readonly float minValue;
-        public readonly float maxValue;
+        public readonly float[,] Values;
 
-        public HeightMap(float[,] values, float minValue, float maxValue)
+        public HeightMap(float[,] values)
         {
-            this.values = values;
-            this.minValue = minValue;
-            this.maxValue = maxValue;
+            Values = values;
         }
     }
 }

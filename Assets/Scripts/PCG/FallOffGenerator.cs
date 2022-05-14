@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿// Unity Imports
+using UnityEngine;
 
 namespace PCG
 {
@@ -21,8 +22,8 @@ namespace PCG
             }
             return map;
         }
-        
-        static float Evaluate(float value)
+
+        private static float Evaluate(float value)
         {
             float a = 3;
             float b = 2.2f;

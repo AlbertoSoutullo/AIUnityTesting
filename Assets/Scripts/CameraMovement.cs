@@ -1,44 +1,50 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
+// Unity Imports
 using UnityEngine;
+
+// Project Imports
+using Player.Scripts;
+
 
 public class CameraMovement : MonoBehaviour
 {
     public GameObject target;
     public Vector3 offset;
-
-    private Transform _targetTransform;
-
     public float smoothSpeed;
-    private GameObject _backupGO;
+    
+    private Transform _targetTransform;
+    private GameObject _backupGameObject;
     
     private void Start()
     {
         target = GameObject.FindWithTag("Player");
+        
         if (target == null)
-        {
-            Debug.Log("Player still not instantiated");
-            Player.InstanceStarted += OnPlayerInstanceStarted;
-            _backupGO = new GameObject();
-            _targetTransform = _backupGO.transform;
-        }
+            PrepareActionWhenTargetSpawn();
         else
-        {
-            _targetTransform = target.transform;
-        }
+            AssignTargetToFollow();
     }
-    
-    private void OnPlayerInstanceStarted(Player instance)
+
+    private void PrepareActionWhenTargetSpawn()
     {
-        Player.InstanceStarted -= OnPlayerInstanceStarted;
+        Debug.Log("Player still not instantiated");
+        PlayerScript.InstanceStarted += OnPlayerInstanceStarted;
+        _backupGameObject = new GameObject();
+        _targetTransform = _backupGameObject.transform;
+    }
+
+    private void AssignTargetToFollow()
+    {
+        _targetTransform = target.transform;
+    }
+
+    private void OnPlayerInstanceStarted(PlayerScript instance)
+    {
+        PlayerScript.InstanceStarted -= OnPlayerInstanceStarted;
         target = instance.gameObject;
         _targetTransform = target.transform;
-        Destroy(_backupGO);
+        Destroy(_backupGameObject);
     }
     
-    // Update is called once per frame
     void LateUpdate()
     {
         Vector3 desiredPosition = _targetTransform.position + offset;

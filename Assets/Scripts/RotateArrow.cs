@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+// Unity Imports
 using UnityEngine;
 
 public class RotateArrow : MonoBehaviour
 {
-    private float rotationSpeed = 50.0f;
-
-    // Update is called once per frame
+    public float rotationSpeed = 50.0f;
+    
     void Update()
     {
         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);

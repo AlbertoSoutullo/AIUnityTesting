@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Project Imports
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,19 +8,19 @@ namespace PCG
 {
     public class ThreadedDataRequester: MonoBehaviour
     {
-        private static ThreadedDataRequester instance;
-        private Queue<ThreadInfo> _dataQueue = new Queue<ThreadInfo>();
+        private static ThreadedDataRequester _instance;
+        private readonly Queue<ThreadInfo> _dataQueue = new Queue<ThreadInfo>();
 
         private void Awake()
         {
-            instance = FindObjectOfType<ThreadedDataRequester>();
+            _instance = FindObjectOfType<ThreadedDataRequester>();
         }
 
         public static void RequestData(Func<object> generateData, Action<object> callback)
         {
             ThreadStart threadStart = delegate
             {
-                instance.DataThread(generateData, callback);
+                _instance.DataThread(generateData, callback);
             };
             
             new Thread(threadStart).Start();
@@ -33,7 +34,6 @@ namespace PCG
                 _dataQueue.Enqueue(new ThreadInfo(callback, data));    
             }
         }
-
         
         private void Update()
         {
@@ -45,10 +45,9 @@ namespace PCG
                     threadInfo.Callback(threadInfo.Parameter);
                 }
             }
-
         }
 
-        private struct ThreadInfo
+        private readonly struct ThreadInfo
         {
             public readonly Action<object> Callback;
             public readonly object Parameter;

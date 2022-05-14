@@ -1,22 +1,18 @@
-﻿using System.Collections;
+﻿// Unity Imports
+using System.Collections;
 using System.Collections.Generic;
-using PCG.Data;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+
+// Project Imports
+using PCG.Data;
 
 namespace PCG
 {
     public class TerrainGenerator : MonoBehaviour
     {
-        private const float viewerMoveThresholdForChunkUpdate = 25f;
-
-        private const float sqrViewerMoveThresholdForChunkUpdate = viewerMoveThresholdForChunkUpdate *
-                                                                viewerMoveThresholdForChunkUpdate;
-
         public HeightMapSettings heightMapSettings;
         public TextureData textureSettings;
-        public MeshSettings meshSettings;
         public GameObject terrainChunk;
         
         public LODInfo[] detailLevels;
@@ -31,20 +27,25 @@ namespace PCG
         private int _chunkSize;
         private int _chunkVisibleInViewDistance;
 
+        private const float ViewerMoveThresholdForChunkUpdate = 25f;
+
+        private const float SqrViewerMoveThresholdForChunkUpdate = ViewerMoveThresholdForChunkUpdate *
+                                                                   ViewerMoveThresholdForChunkUpdate;
+
         private readonly Dictionary<Vector2, GameObject> _terrainChunkDicctionary = new Dictionary<Vector2, GameObject>();
-        private List<GameObject> _terrainChunksVisibleLastUpdate = new List<GameObject>();
+        private readonly List<GameObject> _terrainChunksVisibleLastUpdate = new List<GameObject>();
         
-        public LayerMask TerrainLayer;
+        public LayerMask terrainLayer;
         
         private void Start()
         {
             textureSettings.UpdateMeshHeights(mapMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
             textureSettings.ApplyToMaterial(mapMaterial);
             
-            float MAXViewDistance = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
+            float maxViewDistance = detailLevels[detailLevels.Length - 1].visibleDistanceThreshold;
             
-            _chunkSize = meshSettings.numVertsPerLine;
-            _chunkVisibleInViewDistance = Mathf.RoundToInt(MAXViewDistance / _chunkSize);
+            _chunkSize = MeshSettings.numVertsPerLine;
+            _chunkVisibleInViewDistance = Mathf.RoundToInt(maxViewDistance / _chunkSize);
 
             UpdateVisibleChunks();
             StartCoroutine(UpdatePlayerPosition());
@@ -56,20 +57,25 @@ namespace PCG
             var position = viewer.position;
             _viewerPosition = new Vector2(position.x, position.z);
 
-            if ((_viewerPositionOld - _viewerPosition).sqrMagnitude > sqrViewerMoveThresholdForChunkUpdate)
+            if ((_viewerPositionOld - _viewerPosition).sqrMagnitude > SqrViewerMoveThresholdForChunkUpdate)
             {
                 _viewerPositionOld = _viewerPosition;
                 UpdateVisibleChunks();
             }
-        }   
+        }
 
-        void UpdateVisibleChunks()
+        private void SetPreviousChunksInvisible()
         {
-            foreach (var terrainChunk in _terrainChunksVisibleLastUpdate)
+            foreach (var terrChunkVisible in _terrainChunksVisibleLastUpdate)
             {
-                terrainChunk.GetComponent<TerrainChunk>().SetVisible(false);
+                terrChunkVisible.GetComponent<TerrainChunk>().SetVisible(false);
             }
             _terrainChunksVisibleLastUpdate.Clear();
+        }
+
+        private void UpdateVisibleChunks()
+        {
+            SetPreviousChunksInvisible();
 
             int currentChunkCoordX = Mathf.RoundToInt(_viewerPosition.x / _chunkSize);
             int currentChunkCoordY = Mathf.RoundToInt(_viewerPosition.y / _chunkSize);
@@ -78,45 +84,41 @@ namespace PCG
             {
                 for (int xOffset = -_chunkVisibleInViewDistance; xOffset <= _chunkVisibleInViewDistance; xOffset++)
                 {
-                    Vector2 viewedChunkCoord = new Vector2(currentChunkCoordX + xOffset,
+                    Vector2 viewedChunkCoord = new Vector2(currentChunkCoordX + xOffset, 
                         currentChunkCoordY + yOffset);
 
                     if (_terrainChunkDicctionary.ContainsKey(viewedChunkCoord))
-                    {
                         _terrainChunkDicctionary[viewedChunkCoord].GetComponent<TerrainChunk>().UpdateTerrainChunk();
-                    }
                     else
-                    {
-                        GameObject newChunk = Instantiate(terrainChunk, transform);
-                        newChunk.GetComponent<TerrainChunk>().PrepareChunk(viewedChunkCoord, heightMapSettings, _chunkSize, detailLevels, 
-                            transform, mapMaterial, viewer);
-                        _terrainChunkDicctionary.Add(viewedChunkCoord, newChunk);
-                        newChunk.GetComponent<TerrainChunk>().onVisibilityChanged += OnTerrainChunkVisibilityChange;
-                        newChunk.GetComponent<TerrainChunk>().Load();
-                    }
+                        CreateNewChunk(viewedChunkCoord);
                 }
             }
         }
 
+        private void CreateNewChunk(Vector2 viewedChunkCoord)
+        {
+            GameObject newChunk = Instantiate(terrainChunk, transform);
+            newChunk.GetComponent<TerrainChunk>().PrepareChunk(viewedChunkCoord, heightMapSettings, _chunkSize, detailLevels, 
+                transform, mapMaterial, viewer);
+            _terrainChunkDicctionary.Add(viewedChunkCoord, newChunk);
+            newChunk.GetComponent<TerrainChunk>().ONVisibilityChanged += OnTerrainChunkVisibilityChange;
+            newChunk.GetComponent<TerrainChunk>().Load();
+        }
+        
         private IEnumerator UpdatePlayerPosition()
         {
-            yield return new WaitForSecondsRealtime(1.5f);
-            
-            // Bit shift the index of the layer (8) to get a bit mask
-            int layerMask = 1 << 3;
-            
+            yield return new WaitForSecondsRealtime(2f);
+
             float positionYPlayer = 0;
-            float positionYHunter = 0;
             RaycastHit hit;
             
             if (Physics.Raycast(new Vector3(0, 9999f, 0), Vector3.down,
-                out hit, Mathf.Infinity, TerrainLayer))
+                out hit, Mathf.Infinity, terrainLayer))
             {
-                Debug.Log("HIT");
                 positionYPlayer = hit.point.y;
             }
 
-            positionYPlayer += 1.5f / 2; // model scale is not correct, so distance is manually added
+            positionYPlayer += 1.5f / 2;
             
             Vector3 positionPlayer = new Vector3(0, positionYPlayer, 0);
 

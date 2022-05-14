@@ -1,3 +1,4 @@
+// Unity Imports
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace PCG.Data
         public CabinPrefab cabinPrefab; 
         public Prefab[] prefabs;
 
-        [System.Serializable]
+        [Serializable]
         public class Prefab
         {
             public String name;
@@ -21,10 +22,10 @@ namespace PCG.Data
             public AnimationCurve heightImportance;
         }
 
-        [System.Serializable]
+        [Serializable]
         public class CabinPrefab
         {
-            public Transform Transform;
+            public Transform transform;
             public AnimationCurve heightImportance;
         }
     }
